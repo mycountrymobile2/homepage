@@ -79,6 +79,10 @@ import {
   Mail as MailIcon,
   ArrowRight,
   Sparkle,
+  ChevronDown,
+  Linkedin,
+  Twitter,
+  Youtube,
   type LucideIcon,
 } from "lucide-react";
 
@@ -2474,29 +2478,123 @@ function ClosingCTA() {
 /* 13 — Footer                                                      */
 /* ---------------------------------------------------------------- */
 
-const FOOTER_PRODUCT = [
-  "Cloud Phone System",
-  "AI Contact Center Software",
-  "AI Receptionist (Zia)",
-  "Multi-Channel Messaging",
-  "HD Video",
-  "Workforce Management",
-  "Smart Call Routing",
-];
-const FOOTER_SOLUTIONS = ["Retail", "Healthcare", "Financial Services", "Real Estate", "Legal", "Logistics"];
-const FOOTER_RESOURCES = ["Docs", "API", "Status", "Changelog", "Blog"];
-const FOOTER_COMPANY = ["About", "Customers", "Careers", "Press", "Contact"];
-const FOOTER_LEGAL = ["Security", "Privacy", "Terms", "SLA", "HIPAA", "GDPR"];
+type FooterLink = { label: string; href: string };
+type FooterColumn = { title: string; links: FooterLink[] };
 
-function FooterLinkList({ title, items }: { title: string; items: string[] }) {
+const FOOTER_COLUMNS: FooterColumn[] = [
+  {
+    title: "Cloud Phone",
+    links: [
+      { label: "Business Phone + Zia", href: "/products/cloud-phone/business-phone" },
+      { label: "Customer Engagement", href: "/products/cloud-phone/customer-engagement" },
+      { label: "Personal AI", href: "/products/cloud-phone/personal-ai" },
+      { label: "SMS & MMS", href: "/products/cloud-phone/sms-mms" },
+      { label: "Team Chat", href: "/products/cloud-phone/team-chat" },
+      { label: "Video Meetings", href: "/products/cloud-phone/video-meetings" },
+      { label: "Online Fax", href: "/products/cloud-phone/online-fax" },
+      { label: "Website Chatbot", href: "/products/cloud-phone/website-chatbot" },
+      { label: "Hosted Phone System", href: "/products/cloud-phone/phone-system" },
+    ],
+  },
+  {
+    title: "Contact Center",
+    links: [
+      { label: "Omnichannel", href: "/products/contact-center/omnichannel" },
+      { label: "Outbound Dialer", href: "/products/contact-center/outbound-dialer" },
+      { label: "Agent Assist", href: "/products/contact-center/agent-assist" },
+      { label: "Supervisor Assist", href: "/products/contact-center/supervisor-assist" },
+      { label: "Interaction Analytics", href: "/products/contact-center/interaction-analytics" },
+      { label: "Enterprise", href: "/products/contact-center/enterprise" },
+    ],
+  },
+  {
+    title: "AI · Zia",
+    links: [
+      { label: "Zia Family", href: "/products/ai" },
+      { label: "Zia Receptionist", href: "/products/ai/zia-receptionist" },
+      { label: "Zia Assistant", href: "/products/ai/zia-assistant" },
+      { label: "Zia Conversation Expert", href: "/products/ai/zia-conversation" },
+      { label: "AI Receptionist", href: "/features/ai-receptionist" },
+      { label: "AI Sentiment", href: "/features/ai-sentiment" },
+      { label: "AI Agent Assist", href: "/features/ai-agent-assist" },
+      { label: "Conversation Intelligence", href: "/features/conversation-intelligence" },
+    ],
+  },
+  {
+    title: "Solutions",
+    links: [
+      { label: "Healthcare", href: "/solutions/healthcare" },
+      { label: "Finance", href: "/solutions/finance" },
+      { label: "Retail & eCom", href: "/solutions/retail" },
+      { label: "SaaS & Tech", href: "/solutions/saas" },
+      { label: "Logistics", href: "/solutions/logistics" },
+      { label: "Sales Teams", href: "/solutions/sales-teams" },
+      { label: "Support Teams", href: "/solutions/support-teams" },
+      { label: "Remote Teams", href: "/solutions/remote-teams" },
+      { label: "SMB", href: "/solutions/smb" },
+      { label: "Enterprise IT", href: "/solutions/enterprise-it" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "Pricing", href: "/pricing" },
+      { label: "Integrations", href: "/integrations" },
+      { label: "HubSpot", href: "/integrations/hubspot" },
+      { label: "Zoho", href: "/integrations/zoho" },
+      { label: "Call Recording", href: "/features/call-recording" },
+      { label: "Auto-attendant IVR", href: "/features/auto-attendant" },
+      { label: "Supervisor Tools", href: "/features/supervisor-tools" },
+      { label: "Toll-free Numbers", href: "/features/toll-free-numbers" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+];
+
+const FOOTER_LEGAL: FooterLink[] = [
+  { label: "Security", href: "/security" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "SLA", href: "/sla" },
+  { label: "HIPAA", href: "/hipaa" },
+  { label: "GDPR", href: "/gdpr" },
+];
+
+function FooterColumn({ column }: { column: FooterColumn }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div>
-      <h4 className="font-outfit font-bold text-white text-[14px] mb-4 tracking-wide">{title}</h4>
-      <ul className="space-y-3">
-        {items.map((item) => (
-          <li key={item}>
-            <a href="#" className="font-inter text-[14px] text-white/60 hover:text-white transition-colors">
-              {item}
+    <div className="border-b border-white/10 md:border-0 md:pb-0">
+      {/* Mobile toggle */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="md:hidden w-full flex items-center justify-between py-4 text-left"
+        aria-expanded={open}
+      >
+        <h4 className="font-outfit font-bold text-white text-[14px] tracking-wide">
+          {column.title}
+        </h4>
+        <ChevronDown
+          className={`h-4 w-4 text-white/60 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {/* Desktop heading */}
+      <h4 className="hidden md:block font-outfit font-bold text-white text-[14px] mb-4 tracking-wide">
+        {column.title}
+      </h4>
+
+      <ul
+        className={`space-y-3 pb-4 md:pb-0 md:block ${open ? "block" : "hidden"}`}
+      >
+        {column.links.map((link) => (
+          <li key={link.href}>
+            <a
+              href={link.href}
+              className="font-inter text-[14px] text-white/60 hover:text-white transition-colors"
+            >
+              {link.label}
             </a>
           </li>
         ))}
@@ -2517,50 +2615,88 @@ function Footer() {
       />
 
       <div className="relative max-w-[1280px] mx-auto px-8 pt-16 pb-8">
+        {/* Brand block */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-12 border-b border-white/10">
           <div>
-            <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-violet-400 mb-2 font-outfit">
+            <a
+              href="/"
+              className="inline-block text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-violet-400 mb-2 font-outfit"
+            >
               MyCountryMobile
-            </div>
-            <p className="font-inter text-[15px] text-white/60">
-              MyCountryMobile — cloud phone and AI contact center.
+            </a>
+            <p className="font-inter text-[15px] text-white/60 max-w-md">
+              Cloud phone and AI contact center. Zia, our AI Receptionist, answers every call so
+              your team can focus on the conversations that matter.
             </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="/demo"
+              className="font-inter text-sm font-semibold text-white/80 hover:text-white transition-colors"
+            >
+              Book a demo
+            </a>
+            <a
+              href="/signup"
+              className="inline-flex items-center gap-1 rounded-full bg-white px-4 py-2 font-inter text-sm font-semibold text-slate-900 hover:bg-white/90 transition-colors"
+            >
+              Start free trial
+            </a>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6 py-12">
-          <FooterLinkList title="Product" items={FOOTER_PRODUCT} />
-          <FooterLinkList title="Solutions" items={FOOTER_SOLUTIONS} />
-          <FooterLinkList title="Resources" items={FOOTER_RESOURCES} />
-          <FooterLinkList title="Company" items={FOOTER_COMPANY} />
-          <FooterLinkList title="Trust & Legal" items={FOOTER_LEGAL} />
+        {/* 5-column link grid (accordion on mobile) */}
+        <div className="md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8 lg:gap-6 py-6 md:py-12">
+          {FOOTER_COLUMNS.map((col) => (
+            <FooterColumn key={col.title} column={col} />
+          ))}
         </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-inter text-[12px] text-white/40">© 2026 MyCountryMobile.</p>
+        {/* Trust & Legal bottom strip */}
+        <div className="pt-8 border-t border-white/10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {FOOTER_LEGAL.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="font-inter text-[12px] font-medium text-white/60 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href="https://www.linkedin.com/company/mycountrymobile"
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="LinkedIn"
             >
-              <span className="material-symbols-outlined text-[18px]">link</span>
+              <Linkedin className="h-4 w-4" />
             </a>
             <a
-              href="#"
+              href="https://x.com/mycountrymobile"
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-              aria-label="X"
+              aria-label="X (formerly Twitter)"
             >
-              <span className="material-symbols-outlined text-[18px]">alternate_email</span>
+              <Twitter className="h-4 w-4" />
             </a>
             <a
-              href="#"
+              href="https://www.youtube.com/@mycountrymobile"
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="YouTube"
             >
-              <span className="material-symbols-outlined text-[18px]">play_circle</span>
+              <Youtube className="h-4 w-4" />
             </a>
           </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="pt-6 mt-6 border-t border-white/10">
+          <p className="font-inter text-[12px] text-white/40">
+            © 2026 MyCountryMobile. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
