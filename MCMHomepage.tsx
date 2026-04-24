@@ -910,16 +910,6 @@ function Hero() {
                 </div>
               </div>
 
-              {/* Alex typing (~2.4s–3.6s) — right-aligned */}
-              <div className="chat-typing chat-typing-1 flex items-center gap-2 px-3 py-1.5 message-glass rounded-full w-fit self-end shadow-md pointer-events-auto">
-                <div className="flex gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-1" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-2" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-3" />
-                </div>
-                <span className="text-[10px] font-medium text-slate-500">Alex is typing…</span>
-              </div>
-
               {/* Alex · msg 1 (~3.4s) — right-aligned */}
               <div className="chat-msg chat-msg-2 message-glass p-3.5 rounded-2xl rounded-tr-sm w-[88%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50">
                 <div className="flex-1 min-w-0 order-1">
@@ -950,16 +940,6 @@ function Hero() {
                     Perfect. First call just came in.
                   </p>
                 </div>
-              </div>
-
-              {/* Alex typing (~10.4s–11.6s) — right-aligned */}
-              <div className="chat-typing chat-typing-2 flex items-center gap-2 px-3 py-1.5 message-glass rounded-full w-fit self-end shadow-md pointer-events-auto">
-                <div className="flex gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-1" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-2" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-3" />
-                </div>
-                <span className="text-[10px] font-medium text-slate-500">Alex is typing…</span>
               </div>
 
               {/* Alex · msg 2 (~11.4s) — right-aligned */}
