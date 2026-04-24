@@ -113,6 +113,14 @@ type MenuColumn = {
   items: MenuItem[];
 };
 
+type ProductCategory = {
+  key: string;
+  label: string;
+  tagline: string;
+  featured: { eyebrow: string; title: string; description: string; href: string };
+  items: MenuItem[];
+};
+
 type MegaPanel =
   | {
       kind: "featured";
@@ -126,6 +134,10 @@ type MegaPanel =
   | {
       kind: "simple";
       items: MenuItem[];
+    }
+  | {
+      kind: "products";
+      categories: ProductCategory[];
     };
 
 type TopNav = {
@@ -135,62 +147,67 @@ type TopNav = {
 
 const NAV: TopNav[] = [
   {
-    label: "Cloud Phone",
+    label: "Products",
     panel: {
-      kind: "featured",
-      featured: {
-        eyebrow: "Cloud Phone",
-        title: "Business phone system with Zia AI on every line.",
-        description: "The all-in-one business phone platform.",
-        href: "/products/cloud-phone",
-      },
-      items: [
-        { title: "Business Phone + Zia", description: "Unlimited calling with AI backstop.", href: "/products/cloud-phone/business-phone" },
-        { title: "Customer Engagement", description: "Voice, SMS, social in one inbox.", href: "/products/cloud-phone/customer-engagement" },
-        { title: "Personal AI Assistant", description: "Per-seat AI notes and CRM sync.", href: "/products/cloud-phone/personal-ai" },
-        { title: "Business SMS & MMS", description: "Two-way texting, 10DLC-ready.", href: "/products/cloud-phone/sms-mms" },
-        { title: "Team Chat", description: "Chat wired into your phone system.", href: "/products/cloud-phone/team-chat" },
-        { title: "HD Video Meetings", description: "200-seat video with AI notes.", href: "/products/cloud-phone/video-meetings" },
-        { title: "Online Fax", description: "HIPAA-ready digital fax.", href: "/products/cloud-phone/online-fax" },
-        { title: "Website Chatbot", description: "Drop-in bot across 6+ channels.", href: "/products/cloud-phone/website-chatbot" },
-        { title: "Hosted Phone System", description: "Extensions, IVR, hunt groups.", href: "/products/cloud-phone/phone-system" },
-      ],
-    },
-  },
-  {
-    label: "Contact Center",
-    panel: {
-      kind: "featured",
-      featured: {
-        eyebrow: "Contact Center",
-        title: "AI contact center built for scale.",
-        description: "The AI-first contact center.",
-        href: "/products/contact-center",
-      },
-      items: [
-        { title: "Omnichannel Queue", description: "Voice, chat, social. One queue.", href: "/products/contact-center/omnichannel" },
-        { title: "Outbound Dialer", description: "Power + predictive, USA-compliant.", href: "/products/contact-center/outbound-dialer" },
-        { title: "Zia Agent Assist", description: "Live whisper on every call.", href: "/products/contact-center/agent-assist" },
-        { title: "Zia Supervisor Assist", description: "AI-ranked floor view.", href: "/products/contact-center/supervisor-assist" },
-        { title: "AI Interaction Analytics", description: "Every conversation scored.", href: "/products/contact-center/interaction-analytics" },
-        { title: "Enterprise", description: "500+ seats, SSO, custom SLAs.", href: "/products/contact-center/enterprise" },
-      ],
-    },
-  },
-  {
-    label: "Zia AI",
-    panel: {
-      kind: "featured",
-      featured: {
-        eyebrow: "MCM AI · Zia",
-        title: "Meet the Zia family.",
-        description: "Three AI agents. One voice.",
-        href: "/products/ai",
-      },
-      items: [
-        { title: "Zia AI Receptionist", description: "24/7 call answering in 32 languages.", href: "/products/ai/zia-receptionist" },
-        { title: "Zia Virtual Assistant", description: "Per-seat AI for notes and CRM.", href: "/products/ai/zia-assistant" },
-        { title: "Zia Conversation Expert", description: "Analytics at scale.", href: "/products/ai/zia-conversation" },
+      kind: "products",
+      categories: [
+        {
+          key: "cloud-phone",
+          label: "Cloud Phone",
+          tagline: "Business phone + Zia AI on every line.",
+          featured: {
+            eyebrow: "Cloud Phone",
+            title: "Business phone system with Zia AI on every line.",
+            description: "The all-in-one business phone platform.",
+            href: "/products/cloud-phone",
+          },
+          items: [
+            { title: "Business Phone + Zia", description: "Unlimited calling with AI backstop.", href: "/products/cloud-phone/business-phone" },
+            { title: "Customer Engagement", description: "Voice, SMS, social in one inbox.", href: "/products/cloud-phone/customer-engagement" },
+            { title: "Personal AI Assistant", description: "Per-seat AI notes and CRM sync.", href: "/products/cloud-phone/personal-ai" },
+            { title: "Business SMS & MMS", description: "Two-way texting, 10DLC-ready.", href: "/products/cloud-phone/sms-mms" },
+            { title: "Team Chat", description: "Chat wired into your phone system.", href: "/products/cloud-phone/team-chat" },
+            { title: "HD Video Meetings", description: "200-seat video with AI notes.", href: "/products/cloud-phone/video-meetings" },
+            { title: "Online Fax", description: "HIPAA-ready digital fax.", href: "/products/cloud-phone/online-fax" },
+            { title: "Website Chatbot", description: "Drop-in bot across 6+ channels.", href: "/products/cloud-phone/website-chatbot" },
+            { title: "Hosted Phone System", description: "Extensions, IVR, hunt groups.", href: "/products/cloud-phone/phone-system" },
+          ],
+        },
+        {
+          key: "contact-center",
+          label: "Contact Center",
+          tagline: "AI-first contact center at scale.",
+          featured: {
+            eyebrow: "Contact Center",
+            title: "AI contact center built for scale.",
+            description: "The AI-first contact center.",
+            href: "/products/contact-center",
+          },
+          items: [
+            { title: "Omnichannel Queue", description: "Voice, chat, social. One queue.", href: "/products/contact-center/omnichannel" },
+            { title: "Outbound Dialer", description: "Power + predictive, USA-compliant.", href: "/products/contact-center/outbound-dialer" },
+            { title: "Zia Agent Assist", description: "Live whisper on every call.", href: "/products/contact-center/agent-assist" },
+            { title: "Zia Supervisor Assist", description: "AI-ranked floor view.", href: "/products/contact-center/supervisor-assist" },
+            { title: "AI Interaction Analytics", description: "Every conversation scored.", href: "/products/contact-center/interaction-analytics" },
+            { title: "Enterprise", description: "500+ seats, SSO, custom SLAs.", href: "/products/contact-center/enterprise" },
+          ],
+        },
+        {
+          key: "zia-ai",
+          label: "Zia AI",
+          tagline: "Three AI agents. One voice.",
+          featured: {
+            eyebrow: "MCM AI · Zia",
+            title: "Meet the Zia family.",
+            description: "Three AI agents. One voice.",
+            href: "/products/ai",
+          },
+          items: [
+            { title: "Zia AI Receptionist", description: "24/7 call answering in 32 languages.", href: "/products/ai/zia-receptionist" },
+            { title: "Zia Virtual Assistant", description: "Per-seat AI for notes and CRM.", href: "/products/ai/zia-assistant" },
+            { title: "Zia Conversation Expert", description: "Analytics at scale.", href: "/products/ai/zia-conversation" },
+          ],
+        },
       ],
     },
   },
@@ -268,7 +285,86 @@ const NAV: TopNav[] = [
   },
 ];
 
+function ProductsPanel({ categories }: { categories: ProductCategory[] }) {
+  const [activeKey, setActiveKey] = useState(categories[0].key);
+  const active = categories.find((c) => c.key === activeKey) ?? categories[0];
+
+  return (
+    <div className="grid grid-cols-12 gap-0">
+      {/* Left rail: category selector */}
+      <div className="col-span-4 bg-slate-50/60 border-r border-slate-200/70 p-4">
+        <div className="mb-3 px-3 font-inter text-xs font-semibold uppercase tracking-widest text-slate-500">
+          Products
+        </div>
+        <div className="flex flex-col gap-1">
+          {categories.map((cat) => {
+            const isActive = cat.key === active.key;
+            return (
+              <button
+                key={cat.key}
+                type="button"
+                onMouseEnter={() => setActiveKey(cat.key)}
+                onFocus={() => setActiveKey(cat.key)}
+                className={`text-left rounded-xl px-3 py-3 transition-colors ${
+                  isActive ? "bg-white shadow-sm border border-slate-200/70" : "hover:bg-white/70"
+                }`}
+              >
+                <div
+                  className={`font-inter text-sm font-semibold ${
+                    isActive ? "text-violet-600" : "text-slate-900"
+                  }`}
+                >
+                  {cat.label}
+                </div>
+                <div className="mt-0.5 font-inter text-xs text-slate-500 leading-relaxed">
+                  {cat.tagline}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Right: featured + items */}
+      <div className="col-span-8 p-6">
+        <a
+          href={active.featured.href}
+          className="flex items-start justify-between gap-6 rounded-2xl bg-gradient-to-br from-cyan-50 via-white to-violet-50 border border-slate-200/70 p-5 hover:border-violet-300 hover:shadow-lg transition-all group"
+        >
+          <div>
+            <div className="font-inter text-xs font-semibold uppercase tracking-widest text-violet-600">
+              {active.featured.eyebrow}
+            </div>
+            <div className="mt-2 font-outfit text-lg font-bold text-slate-900 leading-snug text-balance">
+              {active.featured.title}
+            </div>
+            <p className="mt-1.5 font-inter text-sm text-slate-600 leading-relaxed">
+              {active.featured.description}
+            </p>
+          </div>
+          <div className="shrink-0 mt-1 font-inter text-sm font-semibold text-violet-600 flex items-center gap-1">
+            Overview
+            <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+              arrow_forward
+            </span>
+          </div>
+        </a>
+
+        <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1">
+          {active.items.map((item) => (
+            <MenuLink key={item.href} item={item} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MegaPanelContent({ panel }: { panel: MegaPanel }) {
+  if (panel.kind === "products") {
+    return <ProductsPanel categories={panel.categories} />;
+  }
+
   if (panel.kind === "featured") {
     return (
       <div className="grid grid-cols-12 gap-8 p-8">
