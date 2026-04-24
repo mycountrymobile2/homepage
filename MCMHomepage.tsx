@@ -163,7 +163,6 @@ type ProductCategory = {
   tagline: string;
   icon: LucideIcon;
   accent: CategoryAccent;
-  stats?: { label: string; value: string }[];
   featured: { eyebrow: string; title: string; description: string; href: string };
   items: MenuItem[];
 };
@@ -204,10 +203,6 @@ const NAV: TopNav[] = [
           tagline: "Business phone + Zia AI on every line.",
           icon: Phone,
           accent: "cyan",
-          stats: [
-            { label: "Global reach", value: "180+ countries" },
-            { label: "Uptime SLA", value: "99.999%" },
-          ],
           featured: {
             eyebrow: "Cloud Phone",
             title: "The all-in-one business phone platform.",
@@ -232,10 +227,6 @@ const NAV: TopNav[] = [
           tagline: "AI-first contact center at scale.",
           icon: Headphones,
           accent: "violet",
-          stats: [
-            { label: "Seats deployed", value: "500k+" },
-            { label: "AI coverage", value: "100%" },
-          ],
           featured: {
             eyebrow: "Contact Center",
             title: "The AI-first contact center, built for scale.",
@@ -257,10 +248,6 @@ const NAV: TopNav[] = [
           tagline: "Three AI agents. One voice.",
           icon: Sparkles,
           accent: "emerald",
-          stats: [
-            { label: "Languages", value: "32" },
-            { label: "Avg. handle time", value: "-42%" },
-          ],
           featured: {
             eyebrow: "MCM AI · Zia",
             title: "Meet the Zia family of AI agents.",
@@ -577,20 +564,6 @@ function ProductsPanel({ categories }: { categories: ProductCategory[] }) {
               <p className="mt-2 font-inter text-sm text-slate-600 leading-relaxed max-w-md">
                 {active.featured.description}
               </p>
-              {active.stats && (
-                <div className="mt-4 flex flex-wrap items-center gap-4">
-                  {active.stats.map((s) => (
-                    <div key={s.label} className="flex flex-col">
-                      <span className="font-outfit text-sm font-bold text-slate-900">
-                        {s.value}
-                      </span>
-                      <span className="font-inter text-[11px] uppercase tracking-wider text-slate-500">
-                        {s.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
             <div
               className={`shrink-0 mt-1 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/80 backdrop-blur px-3 py-1.5 font-inter text-xs font-semibold ${accent.iconText}`}
