@@ -105,7 +105,7 @@ function Reveal({
 function Header() {
   return (
     <header className="fixed top-0 w-full z-50 border-b border-white/80 bg-white/55 backdrop-blur-3xl shadow-[0_8px_32px_rgba(15,23,42,0.08)]">
-      <nav className="flex justify-between items-center h-20 px-8 max-w-[1280px] mx-auto w-full">
+      <nav className="flex justify-between items-center h-20 max-w-[1280px] mx-auto w-full">
         <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-600 font-outfit">
           MyCountryMobile
         </div>
