@@ -99,39 +99,344 @@ function Reveal({
 }
 
 /* ---------------------------------------------------------------- */
-/* 01 — Header                                                      */
+/* 01 — Header (mega menu on hover)                                 */
 /* ---------------------------------------------------------------- */
 
-function Header() {
+type MenuItem = {
+  title: string;
+  description?: string;
+  href: string;
+};
+
+type MenuColumn = {
+  heading?: string;
+  items: MenuItem[];
+};
+
+type MegaPanel =
+  | {
+      kind: "featured";
+      featured: { eyebrow: string; title: string; description: string; href: string };
+      items: MenuItem[];
+    }
+  | {
+      kind: "columns";
+      columns: MenuColumn[];
+    }
+  | {
+      kind: "simple";
+      items: MenuItem[];
+    };
+
+type TopNav = {
+  label: string;
+  panel: MegaPanel;
+};
+
+const NAV: TopNav[] = [
+  {
+    label: "Cloud Phone",
+    panel: {
+      kind: "featured",
+      featured: {
+        eyebrow: "Cloud Phone",
+        title: "Business phone system with Zia AI on every line.",
+        description: "The all-in-one business phone platform.",
+        href: "/products/cloud-phone",
+      },
+      items: [
+        { title: "Business Phone + Zia", description: "Unlimited calling with AI backstop.", href: "/products/cloud-phone/business-phone" },
+        { title: "Customer Engagement", description: "Voice, SMS, social in one inbox.", href: "/products/cloud-phone/customer-engagement" },
+        { title: "Personal AI Assistant", description: "Per-seat AI notes and CRM sync.", href: "/products/cloud-phone/personal-ai" },
+        { title: "Business SMS & MMS", description: "Two-way texting, 10DLC-ready.", href: "/products/cloud-phone/sms-mms" },
+        { title: "Team Chat", description: "Chat wired into your phone system.", href: "/products/cloud-phone/team-chat" },
+        { title: "HD Video Meetings", description: "200-seat video with AI notes.", href: "/products/cloud-phone/video-meetings" },
+        { title: "Online Fax", description: "HIPAA-ready digital fax.", href: "/products/cloud-phone/online-fax" },
+        { title: "Website Chatbot", description: "Drop-in bot across 6+ channels.", href: "/products/cloud-phone/website-chatbot" },
+        { title: "Hosted Phone System", description: "Extensions, IVR, hunt groups.", href: "/products/cloud-phone/phone-system" },
+      ],
+    },
+  },
+  {
+    label: "Contact Center",
+    panel: {
+      kind: "featured",
+      featured: {
+        eyebrow: "Contact Center",
+        title: "AI contact center built for scale.",
+        description: "The AI-first contact center.",
+        href: "/products/contact-center",
+      },
+      items: [
+        { title: "Omnichannel Queue", description: "Voice, chat, social. One queue.", href: "/products/contact-center/omnichannel" },
+        { title: "Outbound Dialer", description: "Power + predictive, USA-compliant.", href: "/products/contact-center/outbound-dialer" },
+        { title: "Zia Agent Assist", description: "Live whisper on every call.", href: "/products/contact-center/agent-assist" },
+        { title: "Zia Supervisor Assist", description: "AI-ranked floor view.", href: "/products/contact-center/supervisor-assist" },
+        { title: "AI Interaction Analytics", description: "Every conversation scored.", href: "/products/contact-center/interaction-analytics" },
+        { title: "Enterprise", description: "500+ seats, SSO, custom SLAs.", href: "/products/contact-center/enterprise" },
+      ],
+    },
+  },
+  {
+    label: "Zia AI",
+    panel: {
+      kind: "featured",
+      featured: {
+        eyebrow: "MCM AI · Zia",
+        title: "Meet the Zia family.",
+        description: "Three AI agents. One voice.",
+        href: "/products/ai",
+      },
+      items: [
+        { title: "Zia AI Receptionist", description: "24/7 call answering in 32 languages.", href: "/products/ai/zia-receptionist" },
+        { title: "Zia Virtual Assistant", description: "Per-seat AI for notes and CRM.", href: "/products/ai/zia-assistant" },
+        { title: "Zia Conversation Expert", description: "Analytics at scale.", href: "/products/ai/zia-conversation" },
+      ],
+    },
+  },
+  {
+    label: "Features",
+    panel: {
+      kind: "columns",
+      columns: [
+        {
+          heading: "Core Features",
+          items: [
+            { title: "Call Recording", description: "Full-fidelity with keyword search.", href: "/features/call-recording" },
+            { title: "Auto-attendant & IVR", description: "Visual IVR builder.", href: "/features/auto-attendant" },
+            { title: "Supervisor Tools", description: "Barge, whisper, monitor.", href: "/features/supervisor-tools" },
+          ],
+        },
+        {
+          heading: "AI Features",
+          items: [
+            { title: "AI Receptionist", description: "24/7 live answering.", href: "/features/ai-receptionist" },
+            { title: "AI Sentiment Analysis", description: "Real-time emotion scoring.", href: "/features/ai-sentiment" },
+            { title: "AI Agent Assist", description: "Live coaching for agents.", href: "/features/ai-agent-assist" },
+            { title: "Conversation Intelligence", description: "Gong-class, natively.", href: "/features/conversation-intelligence" },
+          ],
+        },
+        {
+          heading: "Numbers",
+          items: [
+            { title: "Toll-free Numbers", description: "800, 888, 877 in minutes.", href: "/features/toll-free-numbers" },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    label: "Solutions",
+    panel: {
+      kind: "columns",
+      columns: [
+        {
+          heading: "By Industry",
+          items: [
+            { title: "Healthcare", description: "HIPAA-ready clinic phones.", href: "/solutions/healthcare" },
+            { title: "Financial Services", description: "Compliant for FINRA + PCI.", href: "/solutions/finance" },
+            { title: "Retail & eCom", description: "Omnichannel for DTC brands.", href: "/solutions/retail" },
+            { title: "SaaS & Tech", description: "API-first phone for SaaS.", href: "/solutions/saas" },
+            { title: "Logistics", description: "Multi-site dispatch.", href: "/solutions/logistics" },
+          ],
+        },
+        {
+          heading: "By Team",
+          items: [
+            { title: "Sales Teams", description: "Dialer + AI coaching.", href: "/solutions/sales-teams" },
+            { title: "Support Teams", description: "One queue, every channel.", href: "/solutions/support-teams" },
+            { title: "Remote Teams", description: "One number, every device.", href: "/solutions/remote-teams" },
+            { title: "SMB Owner-Operators", description: "Zia is your front desk.", href: "/solutions/smb" },
+            { title: "Enterprise IT", description: "SSO, SCIM, multi-site.", href: "/solutions/enterprise-it" },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    label: "Resources",
+    panel: {
+      kind: "simple",
+      items: [
+        { title: "Docs", description: "Product documentation.", href: "/docs" },
+        { title: "API", description: "REST API + webhooks.", href: "/api" },
+        { title: "Status", description: "Live service status.", href: "/status" },
+        { title: "Blog", description: "Latest posts.", href: "/blog" },
+        { title: "Contact", description: "Talk to a human.", href: "/contact" },
+      ],
+    },
+  },
+];
+
+function MegaPanelContent({ panel }: { panel: MegaPanel }) {
+  if (panel.kind === "featured") {
+    return (
+      <div className="grid grid-cols-12 gap-8 p-8">
+        <a
+          href={panel.featured.href}
+          className="col-span-4 flex flex-col justify-between rounded-2xl bg-gradient-to-br from-cyan-50 via-white to-violet-50 border border-slate-200/70 p-6 hover:border-violet-300 hover:shadow-lg transition-all group"
+        >
+          <div>
+            <div className="font-inter text-xs font-semibold uppercase tracking-widest text-violet-600">
+              {panel.featured.eyebrow}
+            </div>
+            <div className="mt-3 font-outfit text-xl font-bold text-slate-900 leading-snug text-balance">
+              {panel.featured.title}
+            </div>
+            <p className="mt-3 font-inter text-sm text-slate-600 leading-relaxed">
+              {panel.featured.description}
+            </p>
+          </div>
+          <div className="mt-6 font-inter text-sm font-semibold text-violet-600 flex items-center gap-1">
+            Explore overview
+            <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </a>
+        <div className="col-span-8 grid grid-cols-2 gap-x-6 gap-y-1">
+          {panel.items.map((item) => (
+            <MenuLink key={item.href} item={item} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (panel.kind === "columns") {
+    const cols = panel.columns.length;
+    const gridCols = cols === 2 ? "grid-cols-2" : cols === 3 ? "grid-cols-3" : "grid-cols-4";
+    return (
+      <div className={`grid ${gridCols} gap-8 p-8`}>
+        {panel.columns.map((col) => (
+          <div key={col.heading}>
+            {col.heading && (
+              <div className="mb-3 font-inter text-xs font-semibold uppercase tracking-widest text-slate-500">
+                {col.heading}
+              </div>
+            )}
+            <div className="flex flex-col gap-1">
+              {col.items.map((item) => (
+                <MenuLink key={item.href} item={item} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // simple
   return (
-    <header className="fixed top-0 w-full z-50 border-b border-white/80 bg-white/55 backdrop-blur-3xl shadow-[0_8px_32px_rgba(15,23,42,0.08)]">
+    <div className="p-4 min-w-[260px]">
+      <div className="flex flex-col gap-1">
+        {panel.items.map((item) => (
+          <MenuLink key={item.href} item={item} compact />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MenuLink({ item, compact = false }: { item: MenuItem; compact?: boolean }) {
+  return (
+    <a
+      href={item.href}
+      className="group rounded-xl px-3 py-2.5 hover:bg-slate-50 transition-colors"
+    >
+      <div className="font-inter text-sm font-semibold text-slate-900 group-hover:text-violet-600 transition-colors">
+        {item.title}
+      </div>
+      {!compact && item.description && (
+        <div className="mt-0.5 font-inter text-xs text-slate-500 leading-relaxed">
+          {item.description}
+        </div>
+      )}
+      {compact && item.description && (
+        <div className="mt-0.5 font-inter text-xs text-slate-500">{item.description}</div>
+      )}
+    </a>
+  );
+}
+
+function Header() {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const closeTimer = useRef<number | null>(null);
+
+  const openMenu = (idx: number) => {
+    if (closeTimer.current) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setActiveIdx(idx);
+  };
+
+  const scheduleClose = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setActiveIdx(null), 120);
+  };
+
+  const activePanel = activeIdx !== null ? NAV[activeIdx].panel : null;
+  const isSimple = activePanel?.kind === "simple";
+
+  return (
+    <header
+      className="fixed top-0 w-full z-50 border-b border-white/80 bg-white/55 backdrop-blur-3xl shadow-[0_8px_32px_rgba(15,23,42,0.08)]"
+      onMouseLeave={scheduleClose}
+    >
       <nav className="flex justify-between items-center h-20 max-w-[1280px] mx-auto w-full">
-        <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-600 font-outfit">
+        <a href="/" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-600 font-outfit">
           MyCountryMobile
+        </a>
+
+        <div className="hidden lg:flex items-center gap-1">
+          {NAV.map((entry, idx) => {
+            const isActive = activeIdx === idx;
+            return (
+              <button
+                key={entry.label}
+                type="button"
+                onMouseEnter={() => openMenu(idx)}
+                onFocus={() => openMenu(idx)}
+                className={`relative px-3 py-2 font-inter text-sm font-medium tracking-tight transition-colors ${
+                  isActive ? "text-violet-600" : "text-slate-600 hover:text-violet-600"
+                }`}
+              >
+                {entry.label}
+                <span
+                  className={`absolute left-3 right-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 transition-opacity ${
+                    isActive ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              </button>
+            );
+          })}
         </div>
-        <div className="hidden md:flex gap-8 items-center">
-          <a className="font-inter text-sm font-medium tracking-tight text-blue-600 border-b-2 border-blue-600 pb-1" href="#">
-            Solutions
-          </a>
-          <a className="font-inter text-sm font-medium tracking-tight text-slate-600 hover:text-blue-500 transition-all duration-300" href="#">
-            Pricing
-          </a>
-          <a className="font-inter text-sm font-medium tracking-tight text-slate-600 hover:text-blue-500 transition-all duration-300" href="#">
-            API
-          </a>
-          <a className="font-inter text-sm font-medium tracking-tight text-slate-600 hover:text-blue-500 transition-all duration-300" href="#">
-            Resources
-          </a>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
+
+        <div className="flex items-center gap-3">
+          <button className="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-slate-600 hover:text-violet-600 transition-colors">
             Login
           </button>
-          <button className="px-6 py-2.5 bg-gradient-to-r from-cyan-400 to-violet-600 text-white rounded-full font-semibold shadow-lg hover:scale-105 active:scale-95 transition-all">
+          <button className="px-5 py-2.5 bg-gradient-to-r from-cyan-400 to-violet-600 text-white rounded-full text-sm font-semibold shadow-lg hover:scale-105 active:scale-95 transition-all">
             Get Started
           </button>
         </div>
       </nav>
+
+      {/* Mega menu panel */}
+      <div
+        className={`absolute left-0 right-0 top-full transition-all duration-200 ${
+          activePanel
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-1 pointer-events-none"
+        }`}
+        onMouseEnter={() => activeIdx !== null && openMenu(activeIdx)}
+        onMouseLeave={scheduleClose}
+      >
+        <div className={`mx-auto ${isSimple ? "max-w-xs" : "max-w-[1200px]"} px-4 pt-2 pb-6`}>
+          <div className="rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/70 shadow-[0_24px_60px_rgba(15,23,42,0.12)] overflow-hidden">
+            {activePanel && <MegaPanelContent panel={activePanel} />}
+          </div>
+        </div>
+      </div>
     </header>
   );
 }
