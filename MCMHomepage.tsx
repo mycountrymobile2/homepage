@@ -408,7 +408,7 @@ function MenuLink({
   return (
     <a
       href={item.href}
-      className="group flex items-start gap-3 rounded-xl px-3 py-2.5 hover:bg-slate-50 transition-colors"
+      className="group flex items-start gap-3.5 rounded-xl px-3 py-3.5 hover:bg-slate-50 transition-colors"
     >
       {Icon && (
         <span
@@ -429,12 +429,12 @@ function MenuLink({
           {item.badge && <Badge kind={item.badge} />}
         </div>
         {!compact && item.description && (
-          <div className="mt-0.5 font-inter text-xs text-slate-500 leading-relaxed">
+          <div className="mt-1 font-inter text-xs text-slate-500 leading-relaxed">
             {item.description}
           </div>
         )}
         {compact && item.description && (
-          <div className="mt-0.5 font-inter text-xs text-slate-500">{item.description}</div>
+          <div className="mt-1 font-inter text-xs text-slate-500">{item.description}</div>
         )}
       </div>
     </a>
@@ -573,7 +573,7 @@ function ProductsPanel({ categories }: { categories: ProductCategory[] }) {
             </div>
           </a>
 
-          <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1">
+          <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2">
             {active.items.map((item) => (
               <MenuLink key={item.href} item={item} accent={active.accent} />
             ))}
@@ -618,7 +618,7 @@ function MegaPanelContent({ panel }: { panel: MegaPanel }) {
               <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </a>
-          <div className="col-span-8 grid grid-cols-2 gap-x-6 gap-y-1">
+          <div className="col-span-8 grid grid-cols-2 gap-x-8 gap-y-2">
             {panel.items.map((item) => (
               <MenuLink key={item.href} item={item} />
             ))}
@@ -634,7 +634,7 @@ function MegaPanelContent({ panel }: { panel: MegaPanel }) {
     const gridCols = cols === 2 ? "grid-cols-2" : cols === 3 ? "grid-cols-3" : "grid-cols-4";
     return (
       <div>
-        <div className={`grid ${gridCols} gap-8 p-8`}>
+        <div className={`grid ${gridCols} gap-10 p-8`}>
           {panel.columns.map((col) => {
             const HeadIcon = col.icon;
             return (
@@ -651,7 +651,7 @@ function MegaPanelContent({ panel }: { panel: MegaPanel }) {
                     </div>
                   </div>
                 )}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1.5">
                   {col.items.map((item) => (
                     <MenuLink key={item.href} item={item} />
                   ))}
