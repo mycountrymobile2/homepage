@@ -772,19 +772,66 @@ function Header() {
 function Hero() {
   const sarahRef = useRef<HTMLVideoElement>(null);
   const alexRef = useRef<HTMLVideoElement>(null);
+  const [chatReady, setChatReady] = useState(false);
 
-  // Restart both videos every 20s so they stay in sync with the chat cycle.
-  // Browsers still loop the videos natively between resets.
+  // Wait until (a) the page is fully loaded AND (b) both videos are actually
+  // playing before starting the chat animation + 20s sync-restart loop.
   useEffect(() => {
-    const restart = () => {
+    let cancelled = false;
+    let interval: number | null = null;
+
+    const waitForPlaying = (v: HTMLVideoElement | null) =>
+      new Promise<void>((resolve) => {
+        if (!v) return resolve();
+        if (!v.paused && v.readyState >= 3) return resolve();
+        const onPlaying = () => {
+          v.removeEventListener("playing", onPlaying);
+          resolve();
+        };
+        v.addEventListener("playing", onPlaying);
+        void v.play().catch(() => {});
+      });
+
+    const waitForLoad = () =>
+      new Promise<void>((resolve) => {
+        if (document.readyState === "complete") return resolve();
+        const onLoad = () => {
+          window.removeEventListener("load", onLoad);
+          resolve();
+        };
+        window.addEventListener("load", onLoad);
+      });
+
+    void Promise.all([
+      waitForLoad(),
+      waitForPlaying(sarahRef.current),
+      waitForPlaying(alexRef.current),
+    ]).then(() => {
+      if (cancelled) return;
+
+      // Reset both videos to frame 0 so they start exactly when the chat starts.
       [sarahRef.current, alexRef.current].forEach((v) => {
         if (!v) return;
         v.currentTime = 0;
         void v.play().catch(() => {});
       });
+
+      setChatReady(true);
+
+      // Keep the videos restarting every 20s so they stay in sync with the chat cycle.
+      interval = window.setInterval(() => {
+        [sarahRef.current, alexRef.current].forEach((v) => {
+          if (!v) return;
+          v.currentTime = 0;
+          void v.play().catch(() => {});
+        });
+      }, 20_000);
+    });
+
+    return () => {
+      cancelled = true;
+      if (interval !== null) window.clearInterval(interval);
     };
-    const interval = window.setInterval(restart, 20_000);
-    return () => window.clearInterval(interval);
   }, []);
 
   return (
@@ -890,9 +937,14 @@ function Hero() {
             </div>
 
             {/* Live chat loop — Sarah <-> Alex, synced to the 20s video restart */}
-            <div className="absolute top-[8%] right-[0%] w-[55%] flex flex-col gap-3 z-20 pointer-events-none">
+            <div
+              className={`absolute top-[8%] right-[0%] w-[55%] flex flex-col gap-3 z-20 pointer-events-none transition-opacity duration-500 ${
+                chatReady ? "opacity-100" : "opacity-0"
+              }`}
+              data-chat-ready={chatReady ? "true" : "false"}
+            >
               {/* Sarah · msg 1 (0s) — left-aligned */}
-              <div className="chat-msg chat-msg-1 message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5">
+              <div className={`${chatReady ? "chat-msg chat-msg-1" : ""} message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5 opacity-0`}>
                 <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white text-[11px] font-bold">
                   S
                 </div>
@@ -908,7 +960,7 @@ function Hero() {
               </div>
 
               {/* Alex · msg 1 (~3.4s) — right-aligned */}
-              <div className="chat-msg chat-msg-2 message-glass p-3.5 rounded-2xl rounded-tr-sm w-[88%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50">
+              <div className={`${chatReady ? "chat-msg chat-msg-2" : ""} message-glass p-3.5 rounded-2xl rounded-tr-sm w-[88%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50 opacity-0`}>
                 <div className="flex-1 min-w-0 order-1">
                   <div className="flex items-center justify-end gap-2 mb-0.5">
                     <span className="text-[10px] text-slate-400">10:43 AM</span>
@@ -924,7 +976,7 @@ function Hero() {
               </div>
 
               {/* Sarah · msg 2 (~7.4s) — left-aligned */}
-              <div className="chat-msg chat-msg-3 message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5">
+              <div className={`${chatReady ? "chat-msg chat-msg-3" : ""} message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5 opacity-0`}>
                 <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white text-[11px] font-bold">
                   S
                 </div>
@@ -940,7 +992,7 @@ function Hero() {
               </div>
 
               {/* Alex · msg 2 (~11.4s) — right-aligned */}
-              <div className="chat-msg chat-msg-4 message-glass p-3.5 rounded-2xl rounded-tr-sm w-[92%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50">
+              <div className={`${chatReady ? "chat-msg chat-msg-4" : ""} message-glass p-3.5 rounded-2xl rounded-tr-sm w-[92%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50 opacity-0`}>
                 <div className="flex-1 min-w-0 order-1">
                   <div className="flex items-center justify-end gap-2 mb-0.5">
                     <span className="text-[10px] text-slate-400">10:44 AM</span>
