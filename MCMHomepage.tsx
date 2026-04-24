@@ -769,20 +769,20 @@ function Header() {
 /* ---------------------------------------------------------------- */
 
 function Hero() {
+  const sarahRef = useRef<HTMLVideoElement>(null);
+  const alexRef = useRef<HTMLVideoElement>(null);
+
+  // Restart both videos every 20s so they stay in sync with the chat cycle.
+  // Browsers still loop the videos natively between resets.
   useEffect(() => {
-    const messages = document.querySelectorAll<HTMLElement>(
-      ".hero-chat .message-entry"
-    );
-    const interval = window.setInterval(() => {
-      messages.forEach((m, i) => {
-        m.style.animation = "none";
-        // trigger reflow
-        void m.offsetWidth;
-        m.style.animation = `message-slide-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${
-          0.5 + i * 2.5
-        }s forwards`;
+    const restart = () => {
+      [sarahRef.current, alexRef.current].forEach((v) => {
+        if (!v) return;
+        v.currentTime = 0;
+        void v.play().catch(() => {});
       });
-    }, 15000);
+    };
+    const interval = window.setInterval(restart, 20_000);
     return () => window.clearInterval(interval);
   }, []);
 
@@ -846,11 +846,15 @@ function Hero() {
           <div className="hero-chat w-full lg:w-[55%] relative h-[460px] md:h-[600px] mt-12 lg:mt-0">
             {/* Video tile: Sarah (top) */}
             <div className="absolute top-[2%] left-[4%] w-[42%] h-[38%] md:h-[46%] glass-panel rounded-3xl overflow-hidden tile-tilt-1 z-30 shadow-2xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt="Sarah · live"
+              <video
+                ref={sarahRef}
+                aria-label="Sarah · live"
                 className="w-full h-full object-cover"
-                src="/videos/sarah.gif"
+                src="/videos/sarah.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-black/55 backdrop-blur-md">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 live-dot" />
@@ -864,11 +868,15 @@ function Hero() {
 
             {/* Video tile: Alex (bottom) */}
             <div className="absolute bottom-[16%] md:bottom-[2%] left-[4%] w-[42%] h-[40%] md:h-[46%] glass-panel rounded-3xl overflow-hidden tile-tilt-3 z-30 shadow-2xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt="Alex · live"
+              <video
+                ref={alexRef}
+                aria-label="Alex · live"
                 className="w-full h-full object-cover"
-                src="/videos/alex.gif"
+                src="/videos/alex.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-black/55 backdrop-blur-md">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 live-dot" />
@@ -880,49 +888,90 @@ function Hero() {
               </div>
             </div>
 
-            {/* Deconstructed chat */}
-            <div className="absolute top-[10%] right-[0%] w-[55%] flex flex-col gap-4 z-20 pointer-events-none">
-              <div
-                className="message-entry message-glass p-4 rounded-3xl rounded-tl-sm w-[85%] self-end shadow-xl pointer-events-auto"
-                style={{ animationDelay: "0.5s" }}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] font-bold text-slate-800">Saif S.</span>
-                  <span className="text-[10px] text-slate-400">10:42 AM</span>
+            {/* Live chat loop — Sarah <-> Alex, synced to the 20s video restart */}
+            <div className="absolute top-[8%] right-[0%] w-[55%] flex flex-col gap-3 z-20 pointer-events-none">
+              {/* Sarah · msg 1 (0s) — left-aligned */}
+              <div className="chat-msg chat-msg-1 message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5">
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white text-[11px] font-bold">
+                  S
                 </div>
-                <p className="text-[13px] text-slate-600 leading-relaxed">
-                  I&apos;ve updated the API docs for multilingual routing.
-                </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[11px] font-bold text-slate-800">Sarah J.</span>
+                    <span className="text-[10px] text-slate-400">10:42 AM</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed">
+                    Can we route the Madrid team to the Spanish queue?
+                  </p>
+                </div>
               </div>
 
-              <div
-                className="message-entry message-glass p-4 rounded-3xl rounded-tl-sm w-[95%] self-end shadow-xl pointer-events-auto border-violet-200/50"
-                style={{ animationDelay: "3s" }}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] font-bold text-violet-600 flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-                    AI Receptionist
-                  </span>
-                  <span className="text-[10px] text-slate-400">10:43 AM</span>
-                </div>
-                <p className="text-[13px] text-slate-700 italic font-medium leading-relaxed">
-                  Noted. I am now processing incoming calls in Spanish for EMEA regions.
-                </p>
-              </div>
-
-              <div
-                className="message-entry flex items-center gap-2 px-4 py-2 message-glass rounded-full w-fit shadow-md pointer-events-auto"
-                style={{ animationDelay: "5s" }}
-              >
+              {/* Alex typing (~2.4s–3.6s) — right-aligned */}
+              <div className="chat-typing chat-typing-1 flex items-center gap-2 px-3 py-1.5 message-glass rounded-full w-fit self-end shadow-md pointer-events-auto">
                 <div className="flex gap-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-1" />
                   <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-2" />
                   <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-3" />
                 </div>
-                <span className="text-[10px] font-medium text-slate-500">
-                  Zia is drafting summary...
-                </span>
+                <span className="text-[10px] font-medium text-slate-500">Alex is typing…</span>
+              </div>
+
+              {/* Alex · msg 1 (~3.4s) — right-aligned */}
+              <div className="chat-msg chat-msg-2 message-glass p-3.5 rounded-2xl rounded-tr-sm w-[88%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50">
+                <div className="flex-1 min-w-0 order-1">
+                  <div className="flex items-center justify-end gap-2 mb-0.5">
+                    <span className="text-[10px] text-slate-400">10:43 AM</span>
+                    <span className="text-[11px] font-bold text-slate-800">Alex R.</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed text-right">
+                    On it — pushing the rule live now.
+                  </p>
+                </div>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-[11px] font-bold order-2">
+                  A
+                </div>
+              </div>
+
+              {/* Sarah · msg 2 (~7.4s) — left-aligned */}
+              <div className="chat-msg chat-msg-3 message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5">
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white text-[11px] font-bold">
+                  S
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[11px] font-bold text-slate-800">Sarah J.</span>
+                    <span className="text-[10px] text-slate-400">10:43 AM</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed">
+                    Perfect. First call just came in.
+                  </p>
+                </div>
+              </div>
+
+              {/* Alex typing (~10.4s–11.6s) — right-aligned */}
+              <div className="chat-typing chat-typing-2 flex items-center gap-2 px-3 py-1.5 message-glass rounded-full w-fit self-end shadow-md pointer-events-auto">
+                <div className="flex gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-1" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-2" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-3" />
+                </div>
+                <span className="text-[10px] font-medium text-slate-500">Alex is typing…</span>
+              </div>
+
+              {/* Alex · msg 2 (~11.4s) — right-aligned */}
+              <div className="chat-msg chat-msg-4 message-glass p-3.5 rounded-2xl rounded-tr-sm w-[92%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50">
+                <div className="flex-1 min-w-0 order-1">
+                  <div className="flex items-center justify-end gap-2 mb-0.5">
+                    <span className="text-[10px] text-slate-400">10:44 AM</span>
+                    <span className="text-[11px] font-bold text-slate-800">Alex R.</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed text-right">
+                    AI is handling the overflow — we&apos;re clear.
+                  </p>
+                </div>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-[11px] font-bold order-2">
+                  A
+                </div>
               </div>
             </div>
 
