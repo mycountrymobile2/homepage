@@ -40,6 +40,46 @@ import {
   Sparkles,
   BarChart3,
   Clock,
+  // Mega menu icons
+  Phone,
+  MessageSquare,
+  Bot,
+  Send,
+  MessagesSquare,
+  Video,
+  Printer,
+  MessageCircle,
+  Server,
+  Headphones,
+  PhoneOutgoing,
+  Activity,
+  Building2,
+  Mic,
+  Brain,
+  LineChart,
+  Disc,
+  PhoneForwarded,
+  Eye,
+  TrendingUp,
+  Hash,
+  HeartPulse,
+  Landmark,
+  ShoppingBag,
+  Code2,
+  Truck,
+  Target,
+  LifeBuoy,
+  Wifi,
+  Store,
+  Shield,
+  BookOpen,
+  Webhook,
+  CheckCircle2,
+  Newspaper,
+  Mail as MailIcon,
+  ArrowRight,
+  Sparkle,
+  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 
@@ -99,39 +139,628 @@ function Reveal({
 }
 
 /* ---------------------------------------------------------------- */
-/* 01 — Header                                                      */
+/* 01 — Header (mega menu on hover)                                 */
 /* ---------------------------------------------------------------- */
 
-function Header() {
+type MenuItem = {
+  title: string;
+  description?: string;
+  href: string;
+  icon?: LucideIcon;
+  badge?: "New" | "AI" | "Beta" | "Popular";
+};
+
+type MenuColumn = {
+  heading?: string;
+  icon?: LucideIcon;
+  items: MenuItem[];
+};
+
+type CategoryAccent = "cyan" | "violet" | "emerald";
+
+type ProductCategory = {
+  key: string;
+  label: string;
+  tagline: string;
+  icon: LucideIcon;
+  accent: CategoryAccent;
+  featured: { eyebrow: string; title: string; description: string; href: string };
+  items: MenuItem[];
+};
+
+type MegaPanel =
+  | {
+      kind: "featured";
+      featured: { eyebrow: string; title: string; description: string; href: string };
+      items: MenuItem[];
+    }
+  | {
+      kind: "columns";
+      columns: MenuColumn[];
+    }
+  | {
+      kind: "simple";
+      items: MenuItem[];
+    }
+  | {
+      kind: "products";
+      categories: ProductCategory[];
+    };
+
+type TopNav = {
+  label: string;
+  panel: MegaPanel;
+};
+
+const NAV: TopNav[] = [
+  {
+    label: "Products",
+    panel: {
+      kind: "products",
+      categories: [
+        {
+          key: "cloud-phone",
+          label: "Cloud Phone",
+          tagline: "Business phone + Zia AI on every line.",
+          icon: Phone,
+          accent: "cyan",
+          featured: {
+            eyebrow: "Cloud Phone",
+            title: "The all-in-one business phone platform.",
+            description: "Unlimited calling, SMS, video, and Zia AI on every line — one login, zero hardware.",
+            href: "/products/cloud-phone",
+          },
+          items: [
+            { title: "Business Phone + Zia", description: "Unlimited calling with AI backstop.", href: "/products/cloud-phone/business-phone", icon: Phone, badge: "Popular" },
+            { title: "Customer Engagement", description: "Voice, SMS, social in one inbox.", href: "/products/cloud-phone/customer-engagement", icon: MessagesSquare },
+            { title: "Personal AI Assistant", description: "Per-seat AI notes and CRM sync.", href: "/products/cloud-phone/personal-ai", icon: Bot, badge: "AI" },
+            { title: "Business SMS & MMS", description: "Two-way texting, 10DLC-ready.", href: "/products/cloud-phone/sms-mms", icon: MessageSquare },
+            { title: "Team Chat", description: "Chat wired into your phone system.", href: "/products/cloud-phone/team-chat", icon: Send },
+            { title: "HD Video Meetings", description: "200-seat video with AI notes.", href: "/products/cloud-phone/video-meetings", icon: Video },
+            { title: "Online Fax", description: "HIPAA-ready digital fax.", href: "/products/cloud-phone/online-fax", icon: Printer },
+            { title: "Website Chatbot", description: "Drop-in bot across 6+ channels.", href: "/products/cloud-phone/website-chatbot", icon: MessageCircle, badge: "New" },
+            { title: "Hosted Phone System", description: "Extensions, IVR, hunt groups.", href: "/products/cloud-phone/phone-system", icon: Server },
+          ],
+        },
+        {
+          key: "contact-center",
+          label: "Contact Center",
+          tagline: "AI-first contact center at scale.",
+          icon: Headphones,
+          accent: "violet",
+          featured: {
+            eyebrow: "Contact Center",
+            title: "The AI-first contact center, built for scale.",
+            description: "Omnichannel queueing, compliant dialing, and Zia whisper on every conversation.",
+            href: "/products/contact-center",
+          },
+          items: [
+            { title: "Omnichannel Queue", description: "Voice, chat, social. One queue.", href: "/products/contact-center/omnichannel", icon: MessagesSquare, badge: "Popular" },
+            { title: "Outbound Dialer", description: "Power + predictive, USA-compliant.", href: "/products/contact-center/outbound-dialer", icon: PhoneOutgoing },
+            { title: "Zia Agent Assist", description: "Live whisper on every call.", href: "/products/contact-center/agent-assist", icon: Mic, badge: "AI" },
+            { title: "Zia Supervisor Assist", description: "AI-ranked floor view.", href: "/products/contact-center/supervisor-assist", icon: Eye, badge: "AI" },
+            { title: "AI Interaction Analytics", description: "Every conversation scored.", href: "/products/contact-center/interaction-analytics", icon: LineChart },
+            { title: "Enterprise", description: "500+ seats, SSO, custom SLAs.", href: "/products/contact-center/enterprise", icon: Building2 },
+          ],
+        },
+        {
+          key: "zia-ai",
+          label: "Zia AI",
+          tagline: "Three AI agents. One voice.",
+          icon: Sparkles,
+          accent: "emerald",
+          featured: {
+            eyebrow: "MCM AI · Zia",
+            title: "Meet the Zia family of AI agents.",
+            description: "Three purpose-built AI coworkers — front desk, personal assistant, and analyst.",
+            href: "/products/ai",
+          },
+          items: [
+            { title: "Zia AI Receptionist", description: "24/7 call answering in 32 languages.", href: "/products/ai/zia-receptionist", icon: Bot, badge: "AI" },
+            { title: "Zia Virtual Assistant", description: "Per-seat AI for notes and CRM.", href: "/products/ai/zia-assistant", icon: Brain, badge: "AI" },
+            { title: "Zia Conversation Expert", description: "Analytics at scale.", href: "/products/ai/zia-conversation", icon: LineChart, badge: "AI" },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    label: "Features",
+    panel: {
+      kind: "columns",
+      columns: [
+        {
+          heading: "Core Features",
+          icon: Disc,
+          items: [
+            { title: "Call Recording", description: "Full-fidelity with keyword search.", href: "/features/call-recording", icon: Disc },
+            { title: "Auto-attendant & IVR", description: "Visual IVR builder.", href: "/features/auto-attendant", icon: PhoneForwarded },
+            { title: "Supervisor Tools", description: "Barge, whisper, monitor.", href: "/features/supervisor-tools", icon: Eye },
+          ],
+        },
+        {
+          heading: "AI Features",
+          icon: Sparkles,
+          items: [
+            { title: "AI Receptionist", description: "24/7 live answering.", href: "/features/ai-receptionist", icon: Bot, badge: "AI" },
+            { title: "AI Sentiment Analysis", description: "Real-time emotion scoring.", href: "/features/ai-sentiment", icon: Activity, badge: "AI" },
+            { title: "AI Agent Assist", description: "Live coaching for agents.", href: "/features/ai-agent-assist", icon: Mic, badge: "AI" },
+            { title: "Conversation Intelligence", description: "Gong-class, natively.", href: "/features/conversation-intelligence", icon: TrendingUp, badge: "AI" },
+          ],
+        },
+        {
+          heading: "Numbers",
+          icon: Hash,
+          items: [
+            { title: "Toll-free Numbers", description: "800, 888, 877 in minutes.", href: "/features/toll-free-numbers", icon: Hash },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    label: "Solutions",
+    panel: {
+      kind: "columns",
+      columns: [
+        {
+          heading: "By Industry",
+          icon: Building2,
+          items: [
+            { title: "Healthcare", description: "HIPAA-ready clinic phones.", href: "/solutions/healthcare", icon: HeartPulse },
+            { title: "Financial Services", description: "Compliant for FINRA + PCI.", href: "/solutions/finance", icon: Landmark },
+            { title: "Retail & eCom", description: "Omnichannel for DTC brands.", href: "/solutions/retail", icon: ShoppingBag },
+            { title: "SaaS & Tech", description: "API-first phone for SaaS.", href: "/solutions/saas", icon: Code2 },
+            { title: "Logistics", description: "Multi-site dispatch.", href: "/solutions/logistics", icon: Truck },
+          ],
+        },
+        {
+          heading: "By Team",
+          icon: Users,
+          items: [
+            { title: "Sales Teams", description: "Dialer + AI coaching.", href: "/solutions/sales-teams", icon: Target },
+            { title: "Support Teams", description: "One queue, every channel.", href: "/solutions/support-teams", icon: LifeBuoy },
+            { title: "Remote Teams", description: "One number, every device.", href: "/solutions/remote-teams", icon: Wifi },
+            { title: "SMB Owner-Operators", description: "Zia is your front desk.", href: "/solutions/smb", icon: Store },
+            { title: "Enterprise IT", description: "SSO, SCIM, multi-site.", href: "/solutions/enterprise-it", icon: Shield },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    label: "Resources",
+    panel: {
+      kind: "simple",
+      items: [
+        { title: "Docs", description: "Product documentation.", href: "/docs", icon: BookOpen },
+        { title: "API", description: "REST API + webhooks.", href: "/api", icon: Webhook },
+        { title: "Status", description: "Live service status.", href: "/status", icon: CheckCircle2 },
+        { title: "Blog", description: "Latest posts.", href: "/blog", icon: Newspaper },
+        { title: "Contact", description: "Talk to a human.", href: "/contact", icon: MailIcon },
+      ],
+    },
+  },
+];
+
+/* Accent token map for product categories */
+const ACCENT: Record<CategoryAccent, {
+  chip: string;
+  dot: string;
+  iconBg: string;
+  iconText: string;
+  ring: string;
+  gradient: string;
+}> = {
+  cyan: {
+    chip: "bg-cyan-50 text-cyan-700 border-cyan-200",
+    dot: "bg-cyan-500",
+    iconBg: "bg-cyan-100",
+    iconText: "text-cyan-700",
+    ring: "ring-cyan-200",
+    gradient: "from-cyan-50 via-white to-cyan-50/40",
+  },
+  violet: {
+    chip: "bg-violet-50 text-violet-700 border-violet-200",
+    dot: "bg-violet-500",
+    iconBg: "bg-violet-100",
+    iconText: "text-violet-700",
+    ring: "ring-violet-200",
+    gradient: "from-violet-50 via-white to-violet-50/40",
+  },
+  emerald: {
+    chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    dot: "bg-emerald-500",
+    iconBg: "bg-emerald-100",
+    iconText: "text-emerald-700",
+    ring: "ring-emerald-200",
+    gradient: "from-emerald-50 via-white to-emerald-50/40",
+  },
+};
+
+const BADGE_STYLES: Record<NonNullable<MenuItem["badge"]>, string> = {
+  New: "bg-emerald-100 text-emerald-700",
+  AI: "bg-gradient-to-r from-cyan-100 to-violet-100 text-violet-700",
+  Beta: "bg-amber-100 text-amber-700",
+  Popular: "bg-rose-100 text-rose-700",
+};
+
+function Badge({ kind }: { kind: NonNullable<MenuItem["badge"]> }) {
   return (
-    <header className="fixed top-0 w-full z-50 border-b border-white/80 bg-white/55 backdrop-blur-3xl shadow-[0_8px_32px_rgba(15,23,42,0.08)]">
-      <nav className="flex justify-between items-center h-20 px-8 max-w-[1280px] mx-auto w-full">
-        <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-600 font-outfit">
+    <span
+      className={`inline-flex items-center px-1.5 py-0.5 rounded-md font-inter text-[10px] font-semibold leading-none tracking-wide ${BADGE_STYLES[kind]}`}
+    >
+      {kind}
+    </span>
+  );
+}
+
+function MenuLink({
+  item,
+  compact = false,
+  accent,
+}: {
+  item: MenuItem;
+  compact?: boolean;
+  accent?: CategoryAccent;
+}) {
+  const Icon = item.icon;
+  const accentStyles = accent ? ACCENT[accent] : null;
+  return (
+    <a
+      href={item.href}
+      className="group flex items-start gap-3.5 rounded-xl px-3 py-3.5 hover:bg-slate-50 transition-colors"
+    >
+      {Icon && (
+        <span
+          className={`shrink-0 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200/70 transition-all ${
+            accentStyles
+              ? `${accentStyles.iconBg} ${accentStyles.iconText} group-hover:ring-2 group-hover:${accentStyles.ring}`
+              : "bg-slate-50 text-slate-600 group-hover:bg-violet-50 group-hover:text-violet-600"
+          }`}
+        >
+          <Icon className="h-4 w-4" />
+        </span>
+      )}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="font-inter text-sm font-semibold text-slate-900 group-hover:text-violet-600 transition-colors">
+            {item.title}
+          </span>
+          {item.badge && <Badge kind={item.badge} />}
+        </div>
+        {!compact && item.description && (
+          <div className="mt-1 font-inter text-xs text-slate-500 leading-relaxed">
+            {item.description}
+          </div>
+        )}
+        {compact && item.description && (
+          <div className="mt-1 font-inter text-xs text-slate-500">{item.description}</div>
+        )}
+      </div>
+    </a>
+  );
+}
+
+function MegaFooter({
+  primary,
+  note,
+}: {
+  primary?: { label: string; href: string };
+  note?: string;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 border-t border-slate-200/70 bg-slate-50/60 px-6 py-3">
+      <div className="flex items-center gap-2 font-inter text-xs text-slate-500">
+        <Sparkle className="h-3.5 w-3.5 text-violet-500" />
+        <span>{note ?? "Every plan includes Zia AI, 24/7 support, and 99.999% uptime."}</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <a
+          href="/compare"
+          className="font-inter text-xs font-semibold text-slate-600 hover:text-violet-600 transition-colors"
+        >
+          Compare plans
+        </a>
+        <a
+          href={primary?.href ?? "/demo"}
+          className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3.5 py-1.5 font-inter text-xs font-semibold text-white hover:bg-violet-600 transition-colors"
+        >
+          {primary?.label ?? "Book a demo"}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function ProductsPanel({ categories }: { categories: ProductCategory[] }) {
+  const [activeKey, setActiveKey] = useState(categories[0].key);
+  const active = categories.find((c) => c.key === activeKey) ?? categories[0];
+  const accent = ACCENT[active.accent];
+
+  return (
+    <div>
+      <div className="grid grid-cols-12 gap-0">
+        {/* Left rail: category selector */}
+        <div className="col-span-4 bg-slate-50/60 border-r border-slate-200/70 p-4">
+          <div className="mb-3 flex items-center justify-between px-2">
+            <div className="font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+              Our Products
+            </div>
+            <div className="font-inter text-[11px] text-slate-400">
+              {categories.length} suites
+            </div>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {categories.map((cat) => {
+              const isActive = cat.key === active.key;
+              const ca = ACCENT[cat.accent];
+              const CatIcon = cat.icon;
+              return (
+                <button
+                  key={cat.key}
+                  type="button"
+                  onMouseEnter={() => setActiveKey(cat.key)}
+                  onFocus={() => setActiveKey(cat.key)}
+                  className={`group text-left rounded-xl px-3 py-3 flex items-center gap-3 transition-all ${
+                    isActive
+                      ? "bg-white shadow-sm border border-slate-200"
+                      : "border border-transparent hover:bg-white/70 hover:border-slate-200/70"
+                  }`}
+                >
+                  <span
+                    className={`shrink-0 flex h-10 w-10 items-center justify-center rounded-lg transition-transform ${ca.iconBg} ${ca.iconText} ${
+                      isActive ? "scale-105" : "group-hover:scale-105"
+                    }`}
+                  >
+                    <CatIcon className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`font-inter text-sm font-semibold ${
+                          isActive ? "text-slate-900" : "text-slate-900"
+                        }`}
+                      >
+                        {cat.label}
+                      </span>
+                      <span className={`h-1.5 w-1.5 rounded-full ${ca.dot} ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-60"} transition-opacity`} />
+                    </div>
+                    <div className="mt-0.5 font-inter text-xs text-slate-500 leading-snug">
+                      {cat.tagline}
+                    </div>
+                  </div>
+                  <ArrowRight
+                    className={`h-4 w-4 shrink-0 transition-all ${
+                      isActive
+                        ? "text-slate-900 translate-x-0 opacity-100"
+                        : "text-slate-400 -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Right: featured + items */}
+        <div className="col-span-8 p-6">
+          <a
+            href={active.featured.href}
+            className={`relative flex items-start justify-between gap-6 rounded-2xl border border-slate-200/70 bg-gradient-to-br ${accent.gradient} p-5 hover:border-slate-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.08)] transition-all group overflow-hidden`}
+          >
+            <div className="relative z-10 flex-1">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border font-inter text-[10px] font-semibold uppercase tracking-widest ${accent.chip}`}
+                >
+                  <span className={`h-1.5 w-1.5 rounded-full ${accent.dot}`} />
+                  {active.featured.eyebrow}
+                </span>
+              </div>
+              <div className="mt-3 font-outfit text-2xl font-bold text-slate-900 leading-tight text-balance">
+                {active.featured.title}
+              </div>
+              <p className="mt-2 font-inter text-sm text-slate-600 leading-relaxed max-w-md">
+                {active.featured.description}
+              </p>
+            </div>
+            <div
+              className={`shrink-0 mt-1 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/80 backdrop-blur px-3 py-1.5 font-inter text-xs font-semibold ${accent.iconText}`}
+            >
+              Overview
+              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </a>
+
+          <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2">
+            {active.items.map((item) => (
+              <MenuLink key={item.href} item={item} accent={active.accent} />
+            ))}
+          </div>
+        </div>
+      </div>
+      <MegaFooter
+        note="Zia AI is included on every plan. 14-day free trial. No card required."
+        primary={{ label: "Talk to sales", href: "/contact-sales" }}
+      />
+    </div>
+  );
+}
+
+function MegaPanelContent({ panel }: { panel: MegaPanel }) {
+  if (panel.kind === "products") {
+    return <ProductsPanel categories={panel.categories} />;
+  }
+
+  if (panel.kind === "featured") {
+    return (
+      <div>
+        <div className="grid grid-cols-12 gap-8 p-8">
+          <a
+            href={panel.featured.href}
+            className="col-span-4 flex flex-col justify-between rounded-2xl bg-gradient-to-br from-cyan-50 via-white to-violet-50 border border-slate-200/70 p-6 hover:border-violet-300 hover:shadow-lg transition-all group"
+          >
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/80 border border-violet-200 font-inter text-[10px] font-semibold uppercase tracking-widest text-violet-700">
+                <Sparkle className="h-3 w-3" />
+                {panel.featured.eyebrow}
+              </div>
+              <div className="mt-3 font-outfit text-2xl font-bold text-slate-900 leading-tight text-balance">
+                {panel.featured.title}
+              </div>
+              <p className="mt-3 font-inter text-sm text-slate-600 leading-relaxed">
+                {panel.featured.description}
+              </p>
+            </div>
+            <div className="mt-6 inline-flex items-center gap-1 font-inter text-sm font-semibold text-violet-600">
+              Explore overview
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </a>
+          <div className="col-span-8 grid grid-cols-2 gap-x-8 gap-y-2">
+            {panel.items.map((item) => (
+              <MenuLink key={item.href} item={item} />
+            ))}
+          </div>
+        </div>
+        <MegaFooter />
+      </div>
+    );
+  }
+
+  if (panel.kind === "columns") {
+    const cols = panel.columns.length;
+    const gridCols = cols === 2 ? "grid-cols-2" : cols === 3 ? "grid-cols-3" : "grid-cols-4";
+    return (
+      <div>
+        <div className={`grid ${gridCols} gap-10 p-8`}>
+          {panel.columns.map((col) => {
+            const HeadIcon = col.icon;
+            return (
+              <div key={col.heading}>
+                {col.heading && (
+                  <div className="mb-3 flex items-center gap-2 px-3">
+                    {HeadIcon && (
+                      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-100 text-slate-600">
+                        <HeadIcon className="h-3.5 w-3.5" />
+                      </span>
+                    )}
+                    <div className="font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                      {col.heading}
+                    </div>
+                  </div>
+                )}
+                <div className="flex flex-col gap-1.5">
+                  {col.items.map((item) => (
+                    <MenuLink key={item.href} item={item} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <MegaFooter />
+      </div>
+    );
+  }
+
+  // simple
+  return (
+    <div className="p-3 min-w-[280px]">
+      <div className="mb-1 px-3 py-1 font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+        Resources
+      </div>
+      <div className="flex flex-col gap-0.5">
+        {panel.items.map((item) => (
+          <MenuLink key={item.href} item={item} compact />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function Header() {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const closeTimer = useRef<number | null>(null);
+
+  const openMenu = (idx: number) => {
+    if (closeTimer.current) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setActiveIdx(idx);
+  };
+
+  const scheduleClose = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setActiveIdx(null), 120);
+  };
+
+  const activePanel = activeIdx !== null ? NAV[activeIdx].panel : null;
+  const isSimple = activePanel?.kind === "simple";
+
+  return (
+    <header
+      className="fixed top-0 w-full z-50 border-b border-white/80 bg-white/55 backdrop-blur-3xl shadow-[0_8px_32px_rgba(15,23,42,0.08)]"
+      onMouseLeave={scheduleClose}
+    >
+      <nav className="flex justify-between items-center h-20 max-w-[1280px] mx-auto w-full">
+        <a href="/" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-600 font-outfit">
           MyCountryMobile
+        </a>
+
+        <div className="hidden lg:flex items-center gap-1">
+          {NAV.map((entry, idx) => {
+            const isActive = activeIdx === idx;
+            return (
+              <button
+                key={entry.label}
+                type="button"
+                onMouseEnter={() => openMenu(idx)}
+                onFocus={() => openMenu(idx)}
+                className={`relative px-3 py-2 font-inter text-sm font-medium tracking-tight transition-colors ${
+                  isActive ? "text-violet-600" : "text-slate-600 hover:text-violet-600"
+                }`}
+              >
+                {entry.label}
+                <span
+                  className={`absolute left-3 right-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 transition-opacity ${
+                    isActive ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              </button>
+            );
+          })}
         </div>
-        <div className="hidden md:flex gap-8 items-center">
-          <a className="font-inter text-sm font-medium tracking-tight text-blue-600 border-b-2 border-blue-600 pb-1" href="#">
-            Solutions
-          </a>
-          <a className="font-inter text-sm font-medium tracking-tight text-slate-600 hover:text-blue-500 transition-all duration-300" href="#">
-            Pricing
-          </a>
-          <a className="font-inter text-sm font-medium tracking-tight text-slate-600 hover:text-blue-500 transition-all duration-300" href="#">
-            API
-          </a>
-          <a className="font-inter text-sm font-medium tracking-tight text-slate-600 hover:text-blue-500 transition-all duration-300" href="#">
-            Resources
-          </a>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
+
+        <div className="flex items-center gap-3">
+          <button className="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-slate-600 hover:text-violet-600 transition-colors">
             Login
           </button>
-          <button className="px-6 py-2.5 bg-gradient-to-r from-cyan-400 to-violet-600 text-white rounded-full font-semibold shadow-lg hover:scale-105 active:scale-95 transition-all">
+          <button className="px-5 py-2.5 bg-gradient-to-r from-cyan-400 to-violet-600 text-white rounded-full text-sm font-semibold shadow-lg hover:scale-105 active:scale-95 transition-all">
             Get Started
           </button>
         </div>
       </nav>
+
+      {/* Mega menu panel */}
+      <div
+        className={`absolute left-0 right-0 top-full transition-all duration-200 ease-out ${
+          activePanel
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-2 pointer-events-none"
+        }`}
+        onMouseEnter={() => activeIdx !== null && openMenu(activeIdx)}
+        onMouseLeave={scheduleClose}
+      >
+        <div className={`mx-auto ${isSimple ? "max-w-xs" : "max-w-[1200px]"} px-4 pt-2 pb-6`}>
+          <div className="rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/70 shadow-[0_24px_60px_rgba(15,23,42,0.12)] ring-1 ring-black/5 overflow-hidden">
+            {activePanel && <MegaPanelContent panel={activePanel} />}
+          </div>
+        </div>
+      </div>
     </header>
   );
 }
@@ -141,21 +770,68 @@ function Header() {
 /* ---------------------------------------------------------------- */
 
 function Hero() {
+  const sarahRef = useRef<HTMLVideoElement>(null);
+  const alexRef = useRef<HTMLVideoElement>(null);
+  const [chatReady, setChatReady] = useState(false);
+
+  // Wait until (a) the page is fully loaded AND (b) both videos are actually
+  // playing before starting the chat animation + 20s sync-restart loop.
   useEffect(() => {
-    const messages = document.querySelectorAll<HTMLElement>(
-      ".hero-chat .message-entry"
-    );
-    const interval = window.setInterval(() => {
-      messages.forEach((m, i) => {
-        m.style.animation = "none";
-        // trigger reflow
-        void m.offsetWidth;
-        m.style.animation = `message-slide-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${
-          0.5 + i * 2.5
-        }s forwards`;
+    let cancelled = false;
+    let interval: number | null = null;
+
+    const waitForPlaying = (v: HTMLVideoElement | null) =>
+      new Promise<void>((resolve) => {
+        if (!v) return resolve();
+        if (!v.paused && v.readyState >= 3) return resolve();
+        const onPlaying = () => {
+          v.removeEventListener("playing", onPlaying);
+          resolve();
+        };
+        v.addEventListener("playing", onPlaying);
+        void v.play().catch(() => {});
       });
-    }, 15000);
-    return () => window.clearInterval(interval);
+
+    const waitForLoad = () =>
+      new Promise<void>((resolve) => {
+        if (document.readyState === "complete") return resolve();
+        const onLoad = () => {
+          window.removeEventListener("load", onLoad);
+          resolve();
+        };
+        window.addEventListener("load", onLoad);
+      });
+
+    void Promise.all([
+      waitForLoad(),
+      waitForPlaying(sarahRef.current),
+      waitForPlaying(alexRef.current),
+    ]).then(() => {
+      if (cancelled) return;
+
+      // Reset both videos to frame 0 so they start exactly when the chat starts.
+      [sarahRef.current, alexRef.current].forEach((v) => {
+        if (!v) return;
+        v.currentTime = 0;
+        void v.play().catch(() => {});
+      });
+
+      setChatReady(true);
+
+      // Keep the videos restarting every 20s so they stay in sync with the chat cycle.
+      interval = window.setInterval(() => {
+        [sarahRef.current, alexRef.current].forEach((v) => {
+          if (!v) return;
+          v.currentTime = 0;
+          void v.play().catch(() => {});
+        });
+      }, 20_000);
+    });
+
+    return () => {
+      cancelled = true;
+      if (interval !== null) window.clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -218,11 +894,15 @@ function Hero() {
           <div className="hero-chat w-full lg:w-[55%] relative h-[460px] md:h-[600px] mt-12 lg:mt-0">
             {/* Video tile: Sarah (top) */}
             <div className="absolute top-[2%] left-[4%] w-[42%] h-[38%] md:h-[46%] glass-panel rounded-3xl overflow-hidden tile-tilt-1 z-30 shadow-2xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt="Sarah · live"
+              <video
+                ref={sarahRef}
+                aria-label="Sarah · live"
                 className="w-full h-full object-cover"
-                src="/videos/sarah.gif"
+                src="/videos/sarah.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-black/55 backdrop-blur-md">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 live-dot" />
@@ -236,11 +916,15 @@ function Hero() {
 
             {/* Video tile: Alex (bottom) */}
             <div className="absolute bottom-[16%] md:bottom-[2%] left-[4%] w-[42%] h-[40%] md:h-[46%] glass-panel rounded-3xl overflow-hidden tile-tilt-3 z-30 shadow-2xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt="Alex · live"
+              <video
+                ref={alexRef}
+                aria-label="Alex · live"
                 className="w-full h-full object-cover"
-                src="/videos/alex.gif"
+                src="/videos/alex.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-black/55 backdrop-blur-md">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 live-dot" />
@@ -252,49 +936,75 @@ function Hero() {
               </div>
             </div>
 
-            {/* Deconstructed chat */}
-            <div className="absolute top-[10%] right-[0%] w-[55%] flex flex-col gap-4 z-20 pointer-events-none">
-              <div
-                className="message-entry message-glass p-4 rounded-3xl rounded-tl-sm w-[85%] self-end shadow-xl pointer-events-auto"
-                style={{ animationDelay: "0.5s" }}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] font-bold text-slate-800">Saif S.</span>
-                  <span className="text-[10px] text-slate-400">10:42 AM</span>
+            {/* Live chat loop — Sarah <-> Alex, synced to the 20s video restart */}
+            <div
+              className={`absolute top-[8%] right-[0%] w-[55%] flex flex-col gap-3 z-20 pointer-events-none transition-opacity duration-500 ${
+                chatReady ? "opacity-100" : "opacity-0"
+              }`}
+              data-chat-ready={chatReady ? "true" : "false"}
+            >
+              {/* Sarah · msg 1 (0s) — left-aligned */}
+              <div className={`${chatReady ? "chat-msg chat-msg-1" : ""} message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5 opacity-0`}>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white text-[11px] font-bold">
+                  S
                 </div>
-                <p className="text-[13px] text-slate-600 leading-relaxed">
-                  I&apos;ve updated the API docs for multilingual routing.
-                </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[11px] font-bold text-slate-800">Sarah J.</span>
+                    <span className="text-[10px] text-slate-400">10:42 AM</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed">
+                    Can we route the Madrid team to the Spanish queue?
+                  </p>
+                </div>
               </div>
 
-              <div
-                className="message-entry message-glass p-4 rounded-3xl rounded-tl-sm w-[95%] self-end shadow-xl pointer-events-auto border-violet-200/50"
-                style={{ animationDelay: "3s" }}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] font-bold text-violet-600 flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-                    AI Receptionist
-                  </span>
-                  <span className="text-[10px] text-slate-400">10:43 AM</span>
+              {/* Alex · msg 1 (~3.4s) — right-aligned */}
+              <div className={`${chatReady ? "chat-msg chat-msg-2" : ""} message-glass p-3.5 rounded-2xl rounded-tr-sm w-[88%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50 opacity-0`}>
+                <div className="flex-1 min-w-0 order-1">
+                  <div className="flex items-center justify-end gap-2 mb-0.5">
+                    <span className="text-[10px] text-slate-400">10:43 AM</span>
+                    <span className="text-[11px] font-bold text-slate-800">Alex R.</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed text-right">
+                    On it — pushing the rule live now.
+                  </p>
                 </div>
-                <p className="text-[13px] text-slate-700 italic font-medium leading-relaxed">
-                  Noted. I am now processing incoming calls in Spanish for EMEA regions.
-                </p>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-[11px] font-bold order-2">
+                  A
+                </div>
               </div>
 
-              <div
-                className="message-entry flex items-center gap-2 px-4 py-2 message-glass rounded-full w-fit shadow-md pointer-events-auto"
-                style={{ animationDelay: "5s" }}
-              >
-                <div className="flex gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-1" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-2" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-3" />
+              {/* Sarah · msg 2 (~7.4s) — left-aligned */}
+              <div className={`${chatReady ? "chat-msg chat-msg-3" : ""} message-glass p-3.5 rounded-2xl rounded-tl-sm w-[88%] self-start shadow-xl pointer-events-auto flex gap-2.5 opacity-0`}>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white text-[11px] font-bold">
+                  S
                 </div>
-                <span className="text-[10px] font-medium text-slate-500">
-                  Zia is drafting summary...
-                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[11px] font-bold text-slate-800">Sarah J.</span>
+                    <span className="text-[10px] text-slate-400">10:43 AM</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed">
+                    Perfect. First call just came in.
+                  </p>
+                </div>
+              </div>
+
+              {/* Alex · msg 2 (~11.4s) — right-aligned */}
+              <div className={`${chatReady ? "chat-msg chat-msg-4" : ""} message-glass p-3.5 rounded-2xl rounded-tr-sm w-[92%] self-end shadow-xl pointer-events-auto flex gap-2.5 border-blue-200/50 opacity-0`}>
+                <div className="flex-1 min-w-0 order-1">
+                  <div className="flex items-center justify-end gap-2 mb-0.5">
+                    <span className="text-[10px] text-slate-400">10:44 AM</span>
+                    <span className="text-[11px] font-bold text-slate-800">Alex R.</span>
+                  </div>
+                  <p className="text-[13px] text-slate-700 leading-relaxed text-right">
+                    AI is handling the overflow — we&apos;re clear.
+                  </p>
+                </div>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-[11px] font-bold order-2">
+                  A
+                </div>
               </div>
             </div>
 
@@ -1797,29 +2507,123 @@ function ClosingCTA() {
 /* 13 — Footer                                                      */
 /* ---------------------------------------------------------------- */
 
-const FOOTER_PRODUCT = [
-  "Cloud Phone System",
-  "AI Contact Center Software",
-  "AI Receptionist (Zia)",
-  "Multi-Channel Messaging",
-  "HD Video",
-  "Workforce Management",
-  "Smart Call Routing",
-];
-const FOOTER_SOLUTIONS = ["Retail", "Healthcare", "Financial Services", "Real Estate", "Legal", "Logistics"];
-const FOOTER_RESOURCES = ["Docs", "API", "Status", "Changelog", "Blog"];
-const FOOTER_COMPANY = ["About", "Customers", "Careers", "Press", "Contact"];
-const FOOTER_LEGAL = ["Security", "Privacy", "Terms", "SLA", "HIPAA", "GDPR"];
+type FooterLink = { label: string; href: string };
+type FooterColumn = { title: string; links: FooterLink[] };
 
-function FooterLinkList({ title, items }: { title: string; items: string[] }) {
+const FOOTER_COLUMNS: FooterColumn[] = [
+  {
+    title: "Cloud Phone",
+    links: [
+      { label: "Business Phone + Zia", href: "/products/cloud-phone/business-phone" },
+      { label: "Customer Engagement", href: "/products/cloud-phone/customer-engagement" },
+      { label: "Personal AI", href: "/products/cloud-phone/personal-ai" },
+      { label: "SMS & MMS", href: "/products/cloud-phone/sms-mms" },
+      { label: "Team Chat", href: "/products/cloud-phone/team-chat" },
+      { label: "Video Meetings", href: "/products/cloud-phone/video-meetings" },
+      { label: "Online Fax", href: "/products/cloud-phone/online-fax" },
+      { label: "Website Chatbot", href: "/products/cloud-phone/website-chatbot" },
+      { label: "Hosted Phone System", href: "/products/cloud-phone/phone-system" },
+    ],
+  },
+  {
+    title: "Contact Center",
+    links: [
+      { label: "Omnichannel", href: "/products/contact-center/omnichannel" },
+      { label: "Outbound Dialer", href: "/products/contact-center/outbound-dialer" },
+      { label: "Agent Assist", href: "/products/contact-center/agent-assist" },
+      { label: "Supervisor Assist", href: "/products/contact-center/supervisor-assist" },
+      { label: "Interaction Analytics", href: "/products/contact-center/interaction-analytics" },
+      { label: "Enterprise", href: "/products/contact-center/enterprise" },
+    ],
+  },
+  {
+    title: "AI · Zia",
+    links: [
+      { label: "Zia Family", href: "/products/ai" },
+      { label: "Zia Receptionist", href: "/products/ai/zia-receptionist" },
+      { label: "Zia Assistant", href: "/products/ai/zia-assistant" },
+      { label: "Zia Conversation Expert", href: "/products/ai/zia-conversation" },
+      { label: "AI Receptionist", href: "/features/ai-receptionist" },
+      { label: "AI Sentiment", href: "/features/ai-sentiment" },
+      { label: "AI Agent Assist", href: "/features/ai-agent-assist" },
+      { label: "Conversation Intelligence", href: "/features/conversation-intelligence" },
+    ],
+  },
+  {
+    title: "Solutions",
+    links: [
+      { label: "Healthcare", href: "/solutions/healthcare" },
+      { label: "Finance", href: "/solutions/finance" },
+      { label: "Retail & eCom", href: "/solutions/retail" },
+      { label: "SaaS & Tech", href: "/solutions/saas" },
+      { label: "Logistics", href: "/solutions/logistics" },
+      { label: "Sales Teams", href: "/solutions/sales-teams" },
+      { label: "Support Teams", href: "/solutions/support-teams" },
+      { label: "Remote Teams", href: "/solutions/remote-teams" },
+      { label: "SMB", href: "/solutions/smb" },
+      { label: "Enterprise IT", href: "/solutions/enterprise-it" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "Pricing", href: "/pricing" },
+      { label: "Integrations", href: "/integrations" },
+      { label: "HubSpot", href: "/integrations/hubspot" },
+      { label: "Zoho", href: "/integrations/zoho" },
+      { label: "Call Recording", href: "/features/call-recording" },
+      { label: "Auto-attendant IVR", href: "/features/auto-attendant" },
+      { label: "Supervisor Tools", href: "/features/supervisor-tools" },
+      { label: "Toll-free Numbers", href: "/features/toll-free-numbers" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+];
+
+const FOOTER_LEGAL: FooterLink[] = [
+  { label: "Security", href: "/security" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "SLA", href: "/sla" },
+  { label: "HIPAA", href: "/hipaa" },
+  { label: "GDPR", href: "/gdpr" },
+];
+
+function FooterColumn({ column }: { column: FooterColumn }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div>
-      <h4 className="font-outfit font-bold text-white text-[14px] mb-4 tracking-wide">{title}</h4>
-      <ul className="space-y-3">
-        {items.map((item) => (
-          <li key={item}>
-            <a href="#" className="font-inter text-[14px] text-white/60 hover:text-white transition-colors">
-              {item}
+    <div className="border-b border-white/10 md:border-0 md:pb-0">
+      {/* Mobile toggle */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="md:hidden w-full flex items-center justify-between py-4 text-left"
+        aria-expanded={open}
+      >
+        <h4 className="font-outfit font-bold text-white text-[14px] tracking-wide">
+          {column.title}
+        </h4>
+        <ChevronDown
+          className={`h-4 w-4 text-white/60 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {/* Desktop heading */}
+      <h4 className="hidden md:block font-outfit font-bold text-white text-[14px] mb-4 tracking-wide">
+        {column.title}
+      </h4>
+
+      <ul
+        className={`space-y-3 pb-4 md:pb-0 md:block ${open ? "block" : "hidden"}`}
+      >
+        {column.links.map((link) => (
+          <li key={link.href}>
+            <a
+              href={link.href}
+              className="font-inter text-[14px] text-white/60 hover:text-white transition-colors"
+            >
+              {link.label}
             </a>
           </li>
         ))}
@@ -1828,7 +2632,7 @@ function FooterLinkList({ title, items }: { title: string; items: string[] }) {
   );
 }
 
-function Footer() {
+export function Footer() {
   return (
     <footer className="relative w-full rounded-t-[40px] bg-[#05070f] text-white overflow-hidden mt-8">
       <div
@@ -1840,50 +2644,94 @@ function Footer() {
       />
 
       <div className="relative max-w-[1280px] mx-auto px-8 pt-16 pb-8">
+        {/* Brand block */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-12 border-b border-white/10">
           <div>
-            <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-violet-400 mb-2 font-outfit">
+            <a
+              href="/"
+              className="inline-block text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-violet-400 mb-2 font-outfit"
+            >
               MyCountryMobile
-            </div>
-            <p className="font-inter text-[15px] text-white/60">
-              MyCountryMobile — cloud phone and AI contact center.
+            </a>
+            <p className="font-inter text-[15px] text-white/60 max-w-md">
+              Cloud phone and AI contact center. Zia, our AI Receptionist, answers every call so
+              your team can focus on the conversations that matter.
             </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="/demo"
+              className="font-inter text-sm font-semibold text-white/80 hover:text-white transition-colors"
+            >
+              Book a demo
+            </a>
+            <a
+              href="/signup"
+              className="inline-flex items-center gap-1 rounded-full bg-white px-4 py-2 font-inter text-sm font-semibold text-slate-900 hover:bg-white/90 transition-colors"
+            >
+              Start free trial
+            </a>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6 py-12">
-          <FooterLinkList title="Product" items={FOOTER_PRODUCT} />
-          <FooterLinkList title="Solutions" items={FOOTER_SOLUTIONS} />
-          <FooterLinkList title="Resources" items={FOOTER_RESOURCES} />
-          <FooterLinkList title="Company" items={FOOTER_COMPANY} />
-          <FooterLinkList title="Trust & Legal" items={FOOTER_LEGAL} />
+        {/* 5-column link grid (accordion on mobile) */}
+        <div className="md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8 lg:gap-6 py-6 md:py-12">
+          {FOOTER_COLUMNS.map((col) => (
+            <FooterColumn key={col.title} column={col} />
+          ))}
         </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-inter text-[12px] text-white/40">© 2026 MyCountryMobile.</p>
+        {/* Trust & Legal bottom strip */}
+        <div className="pt-8 border-t border-white/10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {FOOTER_LEGAL.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="font-inter text-[12px] font-medium text-white/60 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href="https://www.linkedin.com/company/mycountrymobile"
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="LinkedIn"
             >
-              <span className="material-symbols-outlined text-[18px]">link</span>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
+                <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z" />
+              </svg>
             </a>
             <a
-              href="#"
+              href="https://x.com/mycountrymobile"
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-              aria-label="X"
+              aria-label="X (formerly Twitter)"
             >
-              <span className="material-symbols-outlined text-[18px]">alternate_email</span>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
+              </svg>
             </a>
             <a
-              href="#"
+              href="https://www.youtube.com/@mycountrymobile"
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="YouTube"
             >
-              <span className="material-symbols-outlined text-[18px]">play_circle</span>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
+                <path d="M23.5 6.2a3 3 0 0 0-2.12-2.12C19.5 3.57 12 3.57 12 3.57s-7.5 0-9.38.51A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.12c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3 3 0 0 0 2.12-2.12A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.24 3.6-6.24 3.6Z" />
+              </svg>
             </a>
           </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="pt-6 mt-6 border-t border-white/10">
+          <p className="font-inter text-[12px] text-white/40">
+            © 2026 MyCountryMobile. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

@@ -492,3 +492,97 @@ html {
     transform: none !important;
   }
 }
+
+/* ---------------------------------------------------------------- */
+/* Cloud Phone pillar page — animations                              */
+/* ---------------------------------------------------------------- */
+
+/* Pulsing POP markers on the USA map */
+.pop-dot {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: pop-dot 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes pop-dot {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50%      { transform: scale(1.18); opacity: 1; }
+}
+.pop-ring {
+  transform-origin: center;
+  transform-box: fill-box;
+  opacity: 0;
+  animation: pop-ring 2.6s ease-out infinite;
+}
+@keyframes pop-ring {
+  0%   { opacity: 0.55; transform: scale(0.6); }
+  80%  { opacity: 0; }
+  100% { opacity: 0; transform: scale(3.2); }
+}
+
+/* Slow drifting routing lines between POP cities */
+.pop-link {
+  stroke-dasharray: 4 6;
+  animation: pop-link 5.5s linear infinite;
+  opacity: 0.35;
+}
+@keyframes pop-link {
+  to { stroke-dashoffset: -100; }
+}
+
+/* Section 2 bento — soft rise on enter */
+.bento-tile {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bento-tile.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Waveform bars (call recording tile) */
+.wave-bar {
+  transform-origin: bottom center;
+  animation: wave-bar 1.4s ease-in-out infinite;
+}
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.35); }
+  50%      { transform: scaleY(1); }
+}
+
+/* Voicemail transcript marker rolling in */
+.tx-line {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: tx-line 6s ease-out infinite;
+}
+@keyframes tx-line {
+  0%, 100% { opacity: 0; transform: translateY(6px); }
+  10%      { opacity: 0; transform: translateY(6px); }
+  25%, 90% { opacity: 1; transform: translateY(0); }
+}
+
+/* Avatar stack micro-bob (video tile) */
+.av-bob {
+  animation: av-bob 3.2s ease-in-out infinite;
+}
+@keyframes av-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-dot,
+  .pop-ring,
+  .pop-link,
+  .wave-bar,
+  .tx-line,
+  .av-bob {
+    animation: none !important;
+  }
+  .bento-tile {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
