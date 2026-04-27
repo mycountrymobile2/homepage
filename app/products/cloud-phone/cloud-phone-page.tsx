@@ -11,11 +11,10 @@
  *   03 Bento features — 6 features in a non-uniform bento grid
  *   04 AI Receptionist on every line — dark band, asymmetric
  *   05 Compliance for USA outbound — light band, three pillars
- *   06 Testimonial — warm amber/rose
+ *   06 Testimonials — shared from MCMHomepage
  *   07 Pricing callout — brand gradient strip
- *   08 FAQ — clean accordion
- *   09 Closing CTA — dark band
- *   10 Suite explorer — sub-product cards
+ *   08 FAQ — shared from MCMHomepage
+ *   09 Closing CTA — shared from MCMHomepage
  */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -32,15 +31,9 @@ import {
   Sparkles,
   ShieldCheck,
   Hash,
-  ChevronDown,
   Check,
   Quote,
-  MessagesSquare,
-  Send,
-  Printer,
-  MessageCircle,
-  Server,
-  Users,
+
   Pause,
   MicOff,
   Mic,
@@ -53,7 +46,8 @@ import {
   StickyNote,
   User,
 } from "lucide-react";
-import { Header, Footer } from "@/MCMHomepage";
+
+import { Header, Footer, Testimonials, FAQ, ClosingCTA } from "@/MCMHomepage";
 
 /* ---------------------------------------------------------------- */
 /* Reveal on scroll                                                  */
@@ -429,7 +423,7 @@ function HeroSection() {
               </a>
             </div>
             <p className="mt-3 font-inter text-xs text-slate-500">
-              14-day free trial · No credit card required.
+              14-day free trial.
             </p>
 
             {/* Trust bar */}
@@ -1072,49 +1066,7 @@ function ComplianceSection() {
 }
 
 /* ---------------------------------------------------------------- */
-/* 06 — Testimonial                                                  */
-/* ---------------------------------------------------------------- */
-
-function TestimonialSection() {
-  return (
-    <section
-      className="relative py-20 bg-gradient-to-br from-amber-50 via-rose-50/60 to-white"
-      aria-label="Customer story"
-    >
-      <div className="max-w-3xl mx-auto px-6 lg:px-8">
-        <Reveal>
-          <div className="relative rounded-3xl bg-white border border-amber-100 shadow-[0_24px_60px_rgba(244,63,94,0.10)] p-8 lg:p-10">
-            <Quote className="h-8 w-8 text-amber-400 mb-5" />
-            <blockquote className="font-outfit text-xl lg:text-[26px] leading-[1.4] font-semibold text-slate-900 text-balance">
-              &ldquo;We switched from three vendors to MCM in a weekend. Extensions,
-              SMS, and video all work on one login — the team picked it up
-              without any training.&rdquo;
-            </blockquote>
-            <div className="mt-7 flex items-center gap-4 pt-5 border-t border-slate-100">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white font-outfit font-bold">
-                SL
-              </div>
-              <div className="flex-1">
-                <div className="font-inter font-semibold text-slate-900">
-                  Sara Lindqvist
-                </div>
-                <div className="font-inter text-sm text-slate-500">
-                  Head of Ops · Norden Clinics
-                </div>
-              </div>
-              <span className="hidden sm:inline-flex font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-rose-600 bg-rose-50 border border-rose-100 rounded-full px-2.5 py-1">
-                Unified platform
-              </span>
-            </div>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------------- */
-/* 07 — Pricing callout                                              */
+/* 06 — Pricing callout                                              */
 /* ---------------------------------------------------------------- */
 
 function PricingCallout() {
@@ -1136,7 +1088,7 @@ function PricingCallout() {
                   Two plans to fit your team.
                 </h3>
                 <p className="mt-2 font-inter text-sm text-white/85">
-                  14-day free trial · No credit card required · Cancel anytime
+                  14-day free trial
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
@@ -1163,253 +1115,7 @@ function PricingCallout() {
 }
 
 /* ---------------------------------------------------------------- */
-/* 08 — FAQ                                                          */
-/* ---------------------------------------------------------------- */
 
-const FAQS = [
-  {
-    q: "Is MCM Cloud Phone USA-only?",
-    a: "Cloud Phone is built for USA teams. It includes a USA local number and USA outbound. International outbound is available as a pay-as-you-go add-on.",
-  },
-  {
-    q: "What comes with Cloud Phone?",
-    a: "Calling, extensions, voicemail, recording, IVR, SMS, MMS, video meetings, and a HubSpot integration. See /pricing for the exact feature split across plans.",
-  },
-  {
-    q: "Is progressive dialer included?",
-    a: "Power and predictive dialers are included with the contact center tier. Progressive dialer is available on Enterprise.",
-  },
-];
-
-function FaqSection() {
-  const [open, setOpen] = useState<number | null>(0);
-
-  return (
-    <section className="relative bg-white py-20" aria-labelledby="faq-h2">
-      <div className="max-w-3xl mx-auto px-6 lg:px-8">
-        <Reveal>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 border border-slate-200 px-2.5 py-1 font-inter text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-600">
-            FAQ
-          </span>
-          <h2
-            id="faq-h2"
-            className="mt-4 font-outfit text-3xl lg:text-4xl font-bold leading-[1.1] tracking-tight text-slate-900"
-          >
-            Questions, answered.
-          </h2>
-        </Reveal>
-
-        <div className="mt-10 space-y-3">
-          {FAQS.map((f, i) => {
-            const isOpen = open === i;
-            return (
-              <Reveal
-                key={f.q}
-                delay={i * 60}
-                className="rounded-2xl border border-slate-200 bg-white overflow-hidden"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                  className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-slate-50 transition-colors"
-                >
-                  <span className="font-outfit font-bold text-slate-900 text-base lg:text-lg">
-                    {f.q}
-                  </span>
-                  <ChevronDown
-                    className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                <div
-                  className={`grid transition-all duration-300 ease-out ${
-                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="px-5 pb-5 font-inter text-sm text-slate-600 leading-relaxed">
-                      {f.a}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------------- */
-/* 09 — Closing CTA                                                  */
-/* ---------------------------------------------------------------- */
-
-function ClosingCta() {
-  return (
-    <section className="relative bg-slate-950 text-white py-20 overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 opacity-80"
-        style={{
-          backgroundImage:
-            "radial-gradient(ellipse 50% 60% at 50% 0%, rgba(34,211,238,0.18), transparent 60%), radial-gradient(ellipse 60% 70% at 50% 100%, rgba(139,92,246,0.20), transparent 60%)",
-        }}
-      />
-      <div className="relative max-w-3xl mx-auto px-6 lg:px-8 text-center">
-        <Reveal>
-          <h2 className="font-outfit text-3xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-balance">
-            Ready to switch to{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-violet-300">
-              one cloud phone?
-            </span>
-          </h2>
-          <p className="mt-4 font-inter text-base text-white/70 leading-relaxed max-w-xl mx-auto">
-            14-day free trial · No credit card required.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href="/signup"
-              className="inline-flex items-center gap-1.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 font-inter text-sm font-semibold px-5 py-3 transition-colors"
-            >
-              Start Free Trial
-              <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="/demo"
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur border border-white/20 hover:bg-white/15 text-white font-inter text-sm font-semibold px-5 py-3 transition-colors"
-            >
-              Book a Demo
-            </a>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------------- */
-/* 10 — Suite explorer (internal links)                              */
-/* ---------------------------------------------------------------- */
-
-const SUITE = [
-  {
-    href: "/products/cloud-phone/business-phone",
-      title: "Business Phone + AI Agent",
-      description: "Unlimited USA calling with our AI Agent built in.",
-    icon: Phone,
-  },
-  {
-    href: "/products/cloud-phone/customer-engagement",
-    title: "Customer Engagement",
-    description: "Voice, SMS, and social in one inbox.",
-    icon: MessagesSquare,
-  },
-  {
-    href: "/products/cloud-phone/personal-ai",
-    title: "Personal AI Assistant",
-    description: "Per-seat AI notes and CRM sync.",
-    icon: Bot,
-  },
-  {
-    href: "/products/cloud-phone/sms-mms",
-    title: "Business SMS & MMS",
-    description: "Two-way texting, 10DLC-ready.",
-    icon: Send,
-  },
-  {
-    href: "/products/cloud-phone/team-chat",
-    title: "Team Chat",
-    description: "Chat wired into your phone system.",
-    icon: MessageCircle,
-  },
-  {
-    href: "/products/cloud-phone/video-meetings",
-    title: "HD Video Meetings",
-    description: "200 seats with AI summaries.",
-    icon: VideoIcon,
-  },
-  {
-    href: "/products/cloud-phone/online-fax",
-    title: "Online Fax",
-    description: "HIPAA-ready digital fax.",
-    icon: Printer,
-  },
-  {
-    href: "/products/cloud-phone/website-chatbot",
-    title: "Website Chatbot",
-    description: "Drop-in bot across 6+ channels.",
-    icon: MessageCircle,
-  },
-  {
-    href: "/products/cloud-phone/phone-system",
-    title: "Hosted Phone System",
-    description: "Extensions, IVR, hunt groups.",
-    icon: Server,
-  },
-];
-
-function SuiteSection() {
-  return (
-    <section className="relative bg-slate-50 py-20" aria-labelledby="suite-h2">
-      <div className="max-w-[1280px] mx-auto px-6 lg:px-8">
-        <Reveal>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-            <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white border border-slate-200 px-2.5 py-1 font-inter text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-600">
-                <Users className="h-3 w-3" />
-                Explore the suite
-              </span>
-              <h2
-                id="suite-h2"
-                className="mt-3 font-outfit text-3xl lg:text-4xl font-bold leading-[1.1] tracking-tight text-slate-900"
-              >
-                Nine products. One cloud phone.
-              </h2>
-            </div>
-            <a
-              href="/pricing"
-              className="font-inter text-sm font-semibold text-violet-600 hover:text-violet-700 transition-colors"
-            >
-              See pricing →
-            </a>
-          </div>
-        </Reveal>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {SUITE.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <Reveal key={s.href} delay={i * 40}>
-                <a
-                  href={s.href}
-                  className="group block rounded-2xl bg-white border border-slate-200 hover:border-violet-300 hover:shadow-[0_18px_44px_rgba(15,23,42,0.08)] transition-all p-5"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-50 to-violet-50 text-violet-600 group-hover:from-cyan-100 group-hover:to-violet-100 transition-colors">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-violet-600 group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                  <h3 className="mt-4 font-outfit text-base font-bold text-slate-900 group-hover:text-violet-700 transition-colors">
-                    {s.title}
-                  </h3>
-                  <p className="mt-1 font-inter text-sm text-slate-600 leading-relaxed">
-                    {s.description}
-                  </p>
-                </a>
-              </Reveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------------- */
 /* Page                                                              */
 /* ---------------------------------------------------------------- */
 
@@ -1423,11 +1129,10 @@ export default function CloudPhonePage() {
         <FeatureBento />
         <AIReceptionistSection />
         <ComplianceSection />
-        <TestimonialSection />
+        <Testimonials />
         <PricingCallout />
-        <FaqSection />
-        <ClosingCta />
-        <SuiteSection />
+        <FAQ />
+        <ClosingCTA />
       </main>
       <Footer />
     </div>
