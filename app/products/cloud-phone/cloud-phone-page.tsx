@@ -6,7 +6,7 @@
  * URL: /products/cloud-phone
  *
  * Section flow:
- *   01 Hero — animated USA POP map (38 cities) + headline + CTAs
+ *   01 Hero — live calling screen with AI transcript + headline + CTAs
  *   02 Opening paragraph — slate band, accent quote
  *   03 Bento features — 6 features in a non-uniform bento grid
  *   04 Zia AI on every line — dark band, asymmetric
@@ -23,6 +23,7 @@ import {
   ArrowRight,
   Phone,
   PhoneCall,
+  PhoneOff,
   Voicemail,
   Disc,
   PhoneForwarded,
@@ -40,8 +41,18 @@ import {
   MessageCircle,
   Server,
   Users,
+  Pause,
+  MicOff,
+  Mic,
+  Volume2,
+  ArrowLeftRight,
+  Circle,
+  Grid3x3,
+  History,
+  FileText,
+  StickyNote,
+  User,
 } from "lucide-react";
-import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 import { Header, Footer } from "@/MCMHomepage";
 
 /* ---------------------------------------------------------------- */
@@ -94,131 +105,285 @@ function Reveal({
 }
 
 /* ---------------------------------------------------------------- */
-/* USA POP Map (Hero)                                                */
+/* Calling Screen with AI Live Transcript (Hero)                      */
 /* ---------------------------------------------------------------- */
 
-const POP_CITIES: { name: string; coords: [number, number] }[] = [
-  { name: "New York, NY", coords: [-74.006, 40.7128] },
-  { name: "Los Angeles, CA", coords: [-118.2437, 34.0522] },
-  { name: "Chicago, IL", coords: [-87.6298, 41.8781] },
-  { name: "Houston, TX", coords: [-95.3698, 29.7604] },
-  { name: "Phoenix, AZ", coords: [-112.074, 33.4484] },
-  { name: "Philadelphia, PA", coords: [-75.1652, 39.9526] },
-  { name: "San Antonio, TX", coords: [-98.4936, 29.4241] },
-  { name: "San Diego, CA", coords: [-117.1611, 32.7157] },
-  { name: "Dallas, TX", coords: [-96.797, 32.7767] },
-  { name: "San Jose, CA", coords: [-121.8863, 37.3382] },
-  { name: "Austin, TX", coords: [-97.7431, 30.2672] },
-  { name: "Jacksonville, FL", coords: [-81.6557, 30.3322] },
-  { name: "Fort Worth, TX", coords: [-97.3308, 32.7555] },
-  { name: "Columbus, OH", coords: [-82.9988, 39.9612] },
-  { name: "Indianapolis, IN", coords: [-86.1581, 39.7684] },
-  { name: "Charlotte, NC", coords: [-80.8431, 35.2271] },
-  { name: "San Francisco, CA", coords: [-122.4194, 37.7749] },
-  { name: "Seattle, WA", coords: [-122.3321, 47.6062] },
-  { name: "Denver, CO", coords: [-104.9903, 39.7392] },
-  { name: "Washington, DC", coords: [-77.0369, 38.9072] },
-  { name: "Boston, MA", coords: [-71.0589, 42.3601] },
-  { name: "Nashville, TN", coords: [-86.7816, 36.1627] },
-  { name: "Detroit, MI", coords: [-83.0458, 42.3314] },
-  { name: "Memphis, TN", coords: [-90.049, 35.1495] },
-  { name: "Portland, OR", coords: [-122.6765, 45.5152] },
-  { name: "Las Vegas, NV", coords: [-115.1398, 36.1699] },
-  { name: "Louisville, KY", coords: [-85.7585, 38.2527] },
-  { name: "Baltimore, MD", coords: [-76.6122, 39.2904] },
-  { name: "Milwaukee, WI", coords: [-87.9065, 43.0389] },
-  { name: "Albuquerque, NM", coords: [-106.6504, 35.0844] },
-  { name: "Tucson, AZ", coords: [-110.9747, 32.2226] },
-  { name: "Fresno, CA", coords: [-119.7726, 36.7378] },
-  { name: "Atlanta, GA", coords: [-84.388, 33.749] },
-  { name: "Miami, FL", coords: [-80.1918, 25.7617] },
-  { name: "Minneapolis, MN", coords: [-93.265, 44.9778] },
-  { name: "Cleveland, OH", coords: [-81.6944, 41.4993] },
-  { name: "New Orleans, LA", coords: [-90.0715, 29.9511] },
-  { name: "Salt Lake City, UT", coords: [-111.891, 40.7608] },
+type TranscriptLine = {
+  who: string;
+  initials: string;
+  isAgent: boolean;
+  text: string;
+  delay: number;
+};
+
+const TRANSCRIPT_LINES: TranscriptLine[] = [
+  {
+    who: "Sarah Mitchell",
+    initials: "SM",
+    isAgent: false,
+    text: "Hi, this is Sarah from Acme Corp. I'm calling about the enterprise plan we discussed last week.",
+    delay: 0,
+  },
+  {
+    who: "You",
+    initials: "Y",
+    isAgent: true,
+    text: "Hi Sarah! I have all the details ready — we can onboard your team of 50 next Monday.",
+    delay: 1.4,
+  },
+  {
+    who: "Sarah Mitchell",
+    initials: "SM",
+    isAgent: false,
+    text: "Perfect. Will a dedicated account manager be available for our kickoff call?",
+    delay: 2.8,
+  },
+  {
+    who: "You",
+    initials: "Y",
+    isAgent: true,
+    text: "Absolutely — I'll send the calendar invite right after this call.",
+    delay: 4.2,
+  },
 ];
 
-const TOPO_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+function TranscriptMessage({ line }: { line: TranscriptLine }) {
+  const { who, initials, isAgent, text, delay } = line;
+  return (
+    <div
+      className={`transcript-msg flex gap-2 ${isAgent ? "flex-row-reverse" : ""}`}
+      style={{ animationDelay: `${delay}s` }}
+    >
+      <div
+        className={`h-6 w-6 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 shadow-sm ${
+          isAgent
+            ? "bg-slate-900 text-white"
+            : "bg-gradient-to-br from-cyan-500 to-violet-600 text-white"
+        }`}
+        aria-hidden="true"
+      >
+        {initials}
+      </div>
+      <div
+        className={`max-w-[82%] rounded-2xl px-3 py-2 ${
+          isAgent
+            ? "bg-slate-900 text-white rounded-tr-sm"
+            : "bg-slate-100 text-slate-800 rounded-tl-sm"
+        }`}
+      >
+        <div
+          className={`font-inter text-[10px] font-semibold mb-0.5 ${
+            isAgent ? "text-slate-300" : "text-slate-500"
+          }`}
+        >
+          {who}
+        </div>
+        <div className="font-inter text-[12.5px] leading-snug">{text}</div>
+      </div>
+    </div>
+  );
+}
 
-function UsaPopMap() {
+function CallingScreen() {
+  const callButtons: { Icon: typeof Pause; label: string; recording?: boolean }[] = [
+    { Icon: Pause, label: "Hold" },
+    { Icon: MicOff, label: "Mute" },
+    { Icon: Volume2, label: "Speaker" },
+    { Icon: ArrowLeftRight, label: "Transfer" },
+    { Icon: Circle, label: "Record", recording: true },
+    { Icon: Grid3x3, label: "DTMF" },
+  ];
+
+  const tabs: { Icon: typeof Pause; label: string; active?: boolean }[] = [
+    { Icon: History, label: "Call History" },
+    { Icon: FileText, label: "Transcript", active: true },
+    { Icon: StickyNote, label: "Notes" },
+    { Icon: User, label: "Contact Info" },
+  ];
+
   return (
     <div className="relative w-full">
-      {/* soft brand glow behind the map */}
+      {/* soft brand glow behind the card */}
       <div
-        className="absolute inset-0 -z-10 blur-3xl opacity-70"
+        aria-hidden="true"
+        className="absolute -inset-6 -z-10 blur-3xl opacity-70"
         style={{
           background:
-            "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(34,211,238,0.18), transparent 60%), radial-gradient(ellipse 55% 50% at 70% 60%, rgba(139,92,246,0.14), transparent 60%)",
+            "radial-gradient(ellipse 65% 55% at 30% 30%, rgba(34,211,238,0.22), transparent 60%), radial-gradient(ellipse 55% 50% at 75% 70%, rgba(139,92,246,0.18), transparent 60%)",
         }}
       />
-      <ComposableMap
-        projection="geoAlbersUsa"
-        projectionConfig={{ scale: 1050 }}
-        width={780}
-        height={490}
-        style={{ width: "100%", height: "auto" }}
-      >
-        <defs>
-          <linearGradient id="dotGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#22d3ee" />
-            <stop offset="100%" stopColor="#8b5cf6" />
-          </linearGradient>
-          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.4" />
-          </linearGradient>
-        </defs>
 
-        <Geographies geography={TOPO_URL}>
-          {({ geographies }) =>
-            geographies.map((geo) => (
-              <Geography
-                key={geo.rsmKey}
-                geography={geo}
-                style={{
-                  default: {
-                    fill: "#f1f5f9",
-                    stroke: "#cbd5e1",
-                    strokeWidth: 0.6,
-                    outline: "none",
-                  },
-                  hover: { fill: "#f1f5f9", outline: "none" },
-                  pressed: { fill: "#f1f5f9", outline: "none" },
-                }}
-              />
-            ))
-          }
-        </Geographies>
-
-        {POP_CITIES.map((city, i) => (
-          <Marker key={city.name} coordinates={city.coords}>
-            <circle
-              r={6}
-              fill="none"
-              stroke="url(#ringGrad)"
-              strokeWidth={1.2}
-              className="pop-ring"
-              style={{ animationDelay: `${(i % 8) * 0.3}s` }}
-            />
-            <circle
-              r={3.2}
-              fill="url(#dotGrad)"
-              className="pop-dot"
-              style={{ animationDelay: `${(i % 8) * 0.3}s` }}
-            />
-          </Marker>
-        ))}
-      </ComposableMap>
-
-      {/* floating live pill */}
-      <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur border border-slate-200 px-3 py-1.5 shadow-lg">
+      {/* Floating live pill */}
+      <div className="absolute -top-3 right-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-white border border-slate-200 px-3 py-1.5 shadow-lg">
         <span className="relative flex h-2 w-2">
           <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />
           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
         </span>
         <span className="font-inter text-[11px] font-semibold text-slate-700">
-          38 USA POPs · Live
+          Live · Zia AI Transcribing
         </span>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-200 shadow-xl shadow-slate-900/5 overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-[260px_1fr]">
+          {/* LEFT — call controls */}
+          <div className="bg-slate-50/60 border-b md:border-b-0 md:border-r border-slate-200 p-5">
+            {/* Contact header */}
+            <div className="flex items-center gap-3">
+              <div className="relative h-11 w-11 rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 text-white font-outfit font-bold flex items-center justify-center text-sm shadow-md">
+                SM
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-outfit font-semibold text-sm text-slate-900 truncate">
+                  Sarah Mitchell
+                </div>
+                <div className="font-inter text-xs text-slate-500 truncate">
+                  +1 (415) 555-0192
+                </div>
+              </div>
+            </div>
+
+            {/* Status + timer */}
+            <div className="mt-4 flex items-center justify-between rounded-xl bg-white border border-slate-200 px-3 py-2">
+              <div className="flex items-center gap-1.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                </span>
+                <span className="font-inter text-[11px] font-semibold text-emerald-700">
+                  On Call
+                </span>
+              </div>
+              <span className="font-mono text-xs font-semibold text-slate-700 tabular-nums">
+                02:34
+              </span>
+            </div>
+
+            {/* Buttons grid */}
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {callButtons.map(({ Icon, label, recording }) => (
+                <button
+                  key={label}
+                  type="button"
+                  className="group flex flex-col items-center gap-1.5 rounded-xl py-2.5 hover:bg-white border border-transparent hover:border-slate-200 transition-colors"
+                  aria-label={label}
+                >
+                  <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm group-hover:text-slate-900 group-hover:shadow-md transition">
+                    <Icon className="h-4 w-4" />
+                    {recording && (
+                      <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-rose-500 animate-pulse" />
+                    )}
+                  </span>
+                  <span className="font-inter text-[10px] font-medium text-slate-500">
+                    {label}
+                  </span>
+                </button>
+              ))}
+
+              {/* Hangup spans full width */}
+              <button
+                type="button"
+                className="col-span-3 mt-1 flex items-center justify-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 text-white py-2.5 font-inter text-xs font-semibold transition-colors shadow-md shadow-rose-500/20"
+                aria-label="End call"
+              >
+                <PhoneOff className="h-4 w-4" />
+                End Call
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT — transcript */}
+          <div className="flex flex-col min-h-[440px]">
+            {/* Tabs */}
+            <div className="flex items-center gap-1 border-b border-slate-200 px-3 pt-3 overflow-x-auto">
+              {tabs.map(({ Icon, label, active }) => (
+                <button
+                  key={label}
+                  type="button"
+                  className={`relative flex items-center gap-1.5 px-3 py-2 font-inter text-xs font-semibold transition-colors whitespace-nowrap ${
+                    active ? "text-cyan-700" : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{label}</span>
+                  {active && (
+                    <span className="absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Transcript header bar */}
+            <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50/60 border-b border-slate-200">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-white border border-cyan-200 px-2.5 py-1">
+                <Sparkles className="h-3 w-3 text-cyan-600" />
+                <span className="font-inter text-[10.5px] font-semibold uppercase tracking-[0.12em] text-cyan-700">
+                  Zia AI · Live
+                </span>
+              </div>
+              <button
+                type="button"
+                className="font-inter text-[11px] font-semibold text-slate-600 hover:text-slate-900 px-2.5 py-1 rounded-md border border-slate-200 bg-white hover:bg-slate-50 transition"
+              >
+                Stop
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 px-4 py-4 space-y-3 overflow-hidden">
+              {TRANSCRIPT_LINES.map((line) => (
+                <TranscriptMessage key={line.who + line.delay} line={line} />
+              ))}
+
+              {/* Typing indicator */}
+              <div
+                className="flex items-center gap-2 pt-1 transcript-msg"
+                style={{ animationDelay: "5.6s" }}
+              >
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 text-white flex items-center justify-center text-[9px] font-bold flex-shrink-0 shadow-sm">
+                  SM
+                </div>
+                <div className="flex items-center gap-1 rounded-full bg-slate-100 px-3 py-2">
+                  <span
+                    className="typing-dot h-1.5 w-1.5 rounded-full bg-slate-400"
+                    style={{ animationDelay: "0s" }}
+                  />
+                  <span
+                    className="typing-dot h-1.5 w-1.5 rounded-full bg-slate-400"
+                    style={{ animationDelay: "0.2s" }}
+                  />
+                  <span
+                    className="typing-dot h-1.5 w-1.5 rounded-full bg-slate-400"
+                    style={{ animationDelay: "0.4s" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Footer with audio bars */}
+            <div className="flex items-center justify-between px-4 py-2.5 border-t border-slate-200 bg-white">
+              <div className="flex items-center gap-2">
+                <Mic className="h-3.5 w-3.5 text-slate-500" />
+                <div className="flex items-end gap-[2px] h-3.5">
+                  {Array.from({ length: 14 }).map((_, i) => (
+                    <span
+                      key={i}
+                      className="wave-bar w-[2px] rounded-full bg-gradient-to-t from-cyan-400 to-violet-500"
+                      style={{
+                        height: `${30 + ((i * 17) % 70)}%`,
+                        animationDelay: `${i * 0.06}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+              <span className="font-inter text-[10.5px] text-slate-500">
+                Recording · End-to-end encrypted
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -312,9 +477,9 @@ function HeroSection() {
             </ul>
           </div>
 
-          {/* Right — animated USA POP map */}
+          {/* Right — live calling screen with AI transcript */}
           <div className="lg:col-span-7 relative">
-            <UsaPopMap />
+            <CallingScreen />
           </div>
         </div>
       </div>
