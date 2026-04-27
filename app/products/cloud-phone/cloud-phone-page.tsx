@@ -421,7 +421,7 @@ function HeroSection() {
               </a>
             </div>
             <p className="mt-3 font-inter text-xs text-slate-500">
-              14-day free trial · No credit card required.
+              14-day free trial.
             </p>
 
             {/* Trust bar */}
@@ -1086,7 +1086,7 @@ function PricingCallout() {
                   Two plans to fit your team.
                 </h3>
                 <p className="mt-2 font-inter text-sm text-white/85">
-                  14-day free trial · No credit card required · Cancel anytime
+                  14-day free trial
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">

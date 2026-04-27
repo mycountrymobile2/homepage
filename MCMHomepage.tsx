@@ -30,8 +30,6 @@ import {
   PhoneCall,
   Timer,
   Unlock,
-  CreditCard,
-  XCircle,
   Mail,
   Globe,
   LayoutTemplate,
@@ -582,7 +580,7 @@ function ProductsPanel({ categories }: { categories: ProductCategory[] }) {
         </div>
       </div>
       <MegaFooter
-        note="Zia AI is included on every plan. 14-day free trial. No card required."
+        note="Zia AI is included on every plan. 14-day free trial."
         primary={{ label: "Talk to sales", href: "/contact-sales" }}
       />
     </div>
@@ -866,10 +864,6 @@ function Hero() {
                 <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </a>
             </div>
-
-            <p className="mt-4 font-inter text-[14px] text-slate-500 font-normal">
-              No credit card. Cancel anytime.
-            </p>
 
             <div className="mt-12 flex flex-wrap gap-3">
               <div className="flex items-center gap-2 h-9 px-4 glass-panel rounded-full text-sm font-medium text-slate-700">
@@ -2256,9 +2250,9 @@ const HIW_STEPS: Array<{
     title: "Sign up",
     subtitle: "Five-minute signup. Every plan unlocked.",
     description:
-      "Create your account and get immediate access to every feature. No card required, no tier-gating at trial.",
-    features: ["Account ready in 5 minutes", "All features unlocked", "No credit card", "Cancel anytime"],
-    featureIcons: [Timer, Unlock, CreditCard, XCircle],
+      "Create your account and get immediate access to every feature. No tier-gating at trial.",
+    features: ["Account ready in 5 minutes", "All features unlocked"],
+    featureIcons: [Timer, Unlock],
     Icon: UserPlus,
     color: "#3b82f6",
     ctaLabel: "Create account",
