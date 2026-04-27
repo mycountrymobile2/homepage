@@ -33,6 +33,7 @@ import {
   Hash,
   Check,
   Quote,
+
   Pause,
   MicOff,
   Mic,
@@ -45,6 +46,7 @@ import {
   StickyNote,
   User,
 } from "lucide-react";
+
 import { Header, Footer, Testimonials, FAQ, ClosingCTA } from "@/MCMHomepage";
 
 /* ---------------------------------------------------------------- */
@@ -1113,6 +1115,7 @@ function PricingCallout() {
 }
 
 /* ---------------------------------------------------------------- */
+
 /* Page                                                              */
 /* ---------------------------------------------------------------- */
 
