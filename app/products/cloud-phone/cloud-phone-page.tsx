@@ -9,7 +9,7 @@
  *   01 Hero — live calling screen with AI transcript + headline + CTAs
  *   02 Opening paragraph — slate band, accent quote
  *   03 Bento features — 6 features in a non-uniform bento grid
- *   04 Zia AI on every line — dark band, asymmetric
+ *   04 AI Receptionist on every line — dark band, asymmetric
  *   05 Compliance for USA outbound — light band, three pillars
  *   06 Testimonial — warm amber/rose
  *   07 Pricing callout — brand gradient strip
@@ -213,7 +213,7 @@ function CallingScreen() {
           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
         </span>
         <span className="font-inter text-[11px] font-semibold text-slate-700">
-          Live · Zia AI Transcribing
+          Live · AI Transcribing
         </span>
       </div>
 
@@ -312,7 +312,7 @@ function CallingScreen() {
               <div className="inline-flex items-center gap-1.5 rounded-full bg-white border border-cyan-200 px-2.5 py-1">
                 <Sparkles className="h-3 w-3 text-cyan-600" />
                 <span className="font-inter text-[10.5px] font-semibold uppercase tracking-[0.12em] text-cyan-700">
-                  Zia AI · Live
+                  AI Agent · Live
                 </span>
               </div>
               <button
@@ -842,10 +842,10 @@ function FeatureBento() {
 }
 
 /* ---------------------------------------------------------------- */
-/* 04 — Zia AI on every line                                         */
+/* 04 — AI Receptionist on every line                                */
 /* ---------------------------------------------------------------- */
 
-function ZiaSection() {
+function AIReceptionistSection() {
   return (
     <section className="relative bg-slate-950 text-white py-20 overflow-hidden">
       <div
@@ -863,16 +863,16 @@ function ZiaSection() {
           <div className="lg:col-span-5">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur border border-white/20 px-2.5 py-1 font-inter text-[10.5px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
               <Bot className="h-3 w-3" />
-              MCM AI · Zia
+                MCM AI Receptionist
             </span>
             <h2 className="mt-4 font-outfit text-3xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-white text-balance">
-              Zia, our AI Receptionist,{" "}
+                Our AI Receptionist,{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-violet-300">
                 on every line.
               </span>
             </h2>
             <p className="mt-4 font-inter text-base text-white/70 leading-relaxed">
-              Zia sits on every MCM line. She answers, qualifies, books, and
+                Our AI Agent sits on every MCM line. It answers, qualifies, books, and
               summarizes — with CRM write-back to HubSpot, Zoho, or Pipedrive.
             </p>
 
@@ -899,19 +899,19 @@ function ZiaSection() {
                 href="/products/ai/zia-receptionist"
                 className="inline-flex items-center gap-1.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 font-inter text-sm font-semibold px-5 py-2.5 transition-colors"
               >
-                Meet Zia
+                Meet the AI Agent
                 <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href="/products/ai"
                 className="font-inter text-sm font-semibold text-white/70 hover:text-white transition-colors"
               >
-                The Zia family →
+                The AI agent family →
               </a>
             </div>
           </div>
 
-          {/* Right — Zia card */}
+              {/* Right — AI Receptionist card */}
           <div className="lg:col-span-7">
             <div className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6 lg:p-8 shadow-2xl">
               {/* Live call header */}
@@ -922,7 +922,7 @@ function ZiaSection() {
                     <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-slate-900" />
                   </div>
                   <div>
-                    <div className="font-inter text-sm font-semibold text-white">Zia · AI Receptionist</div>
+                    <div className="font-inter text-sm font-semibold text-white">AI Receptionist</div>
                     <div className="font-inter text-[11px] text-white/50">Live call · +1 (415) 555-0182</div>
                   </div>
                 </div>
@@ -1297,8 +1297,8 @@ function ClosingCta() {
 const SUITE = [
   {
     href: "/products/cloud-phone/business-phone",
-    title: "Business Phone + Zia",
-    description: "Unlimited USA calling with Zia AI built in.",
+      title: "Business Phone + AI Agent",
+      description: "Unlimited USA calling with our AI Agent built in.",
     icon: Phone,
   },
   {
@@ -1421,7 +1421,7 @@ export default function CloudPhonePage() {
         <HeroSection />
         <OpeningSection />
         <FeatureBento />
-        <ZiaSection />
+        <AIReceptionistSection />
         <ComplianceSection />
         <TestimonialSection />
         <PricingCallout />
