@@ -2360,7 +2360,7 @@ const TESTIMONIAL_RESULTS = [
   { stat: "−38%", brand: "Cedarwood", metric: "Average Handle Time" },
 ];
 
-function Testimonials() {
+export function Testimonials() {
   return (
     <section className="relative py-24 section-bg-soft-blue overflow-hidden">
       <SlidingTestimonial />
@@ -2425,7 +2425,7 @@ const FAQS = [
   },
 ];
 
-function FAQ() {
+export function FAQ() {
   return (
     <section className="relative py-24 px-6 md:px-12 bg-white">
       <div className="max-w-[900px] mx-auto">
@@ -2462,7 +2462,7 @@ function FAQ() {
 /* 12 — ClosingCTA                                                  */
 /* ---------------------------------------------------------------- */
 
-function ClosingCTA() {
+export function ClosingCTA() {
   return (
     <section className="relative py-24 px-6 md:px-12 section-bg-mesh-soft">
       <div className="max-w-[1100px] mx-auto">
