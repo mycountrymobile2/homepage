@@ -610,77 +610,82 @@ function FeatureBento() {
               Local caller ID matching — no flagged or spam-likely outbound.
             </p>
 
-            {/* mini stat row */}
-            <div className="mt-7 grid grid-cols-3 gap-3 max-w-md">
-              <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
-                <div className="font-outfit text-2xl font-bold text-slate-900">38</div>
-                <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
-                  USA POPs
+            {/* Bottom: stats column + live calls panel side-by-side on md+ */}
+            <div className="mt-7 grid grid-cols-1 sm:grid-cols-5 gap-4 items-stretch">
+              {/* Stats — stacked on the left */}
+              <div className="sm:col-span-2 grid grid-cols-3 sm:grid-cols-1 gap-3">
+                <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
+                  <div className="font-outfit text-2xl font-bold text-slate-900">38</div>
+                  <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
+                    USA POPs
+                  </div>
                 </div>
-              </div>
-              <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
-                <div className="font-outfit text-2xl font-bold text-slate-900">99.99%</div>
-                <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
-                  Uptime
+                <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
+                  <div className="font-outfit text-2xl font-bold text-slate-900">99.99%</div>
+                  <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
+                    Uptime
+                  </div>
                 </div>
-              </div>
-              <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
-                <div className="font-outfit text-2xl font-bold text-slate-900">∞</div>
-                <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
-                  USA minutes
+                <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
+                  <div className="font-outfit text-2xl font-bold text-slate-900">∞</div>
+                  <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
+                    USA minutes
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Live USA call activity */}
-            <div className="relative mt-6 rounded-2xl bg-white border border-slate-200 p-4 max-w-md shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <div className="inline-flex items-center gap-1.5">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
-                  <span className="font-inter text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700">
-                    Live calls
-                  </span>
-                </div>
-                <span className="font-mono text-[11px] font-semibold text-slate-500 tabular-nums">
-                  1,284 now
-                </span>
               </div>
 
-              <ul className="space-y-2">
-                {[
-                  { city: "New York, NY", duration: "04:21", offset: 0 },
-                  { city: "Austin, TX", duration: "01:08", offset: 3 },
-                  { city: "Seattle, WA", duration: "07:45", offset: 6 },
-                ].map(({ city, duration, offset }) => (
-                  <li
-                    key={city}
-                    className="flex items-center gap-3 rounded-lg bg-slate-50/70 px-2.5 py-1.5"
-                  >
-                    <PhoneCall className="h-3.5 w-3.5 text-cyan-600 flex-shrink-0" />
-                    <span className="font-inter text-[12px] font-semibold text-slate-800 flex-shrink-0 w-[110px] truncate">
-                      {city}
+              {/* Live USA call activity */}
+              <div className="sm:col-span-3 relative rounded-2xl bg-white border border-slate-200 p-4 shadow-sm flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="inline-flex items-center gap-1.5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                     </span>
-                    <div className="flex items-end gap-[2px] h-3 flex-1">
-                      {Array.from({ length: 16 }).map((_, i) => (
-                        <span
-                          key={i}
-                          className="wave-bar w-[2px] rounded-full bg-gradient-to-t from-cyan-400 to-violet-500"
-                          style={{
-                            height: `${25 + ((i * 19 + offset * 7) % 75)}%`,
-                            animationDelay: `${(i * 0.05 + offset * 0.1) % 1}s`,
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <span className="font-mono text-[11px] font-semibold text-slate-500 tabular-nums flex-shrink-0">
-                      {duration}
+                    <span className="font-inter text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700">
+                      Live calls
                     </span>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                  <span className="font-mono text-[11px] font-semibold text-slate-500 tabular-nums">
+                    1,284 now
+                  </span>
+                </div>
+
+                <ul className="space-y-2 flex-1">
+                  {[
+                    { city: "New York, NY", duration: "04:21", offset: 0 },
+                    { city: "Austin, TX", duration: "01:08", offset: 3 },
+                    { city: "Seattle, WA", duration: "07:45", offset: 6 },
+                    { city: "Miami, FL", duration: "02:13", offset: 2 },
+                    { city: "Denver, CO", duration: "05:36", offset: 5 },
+                  ].map(({ city, duration, offset }) => (
+                    <li
+                      key={city}
+                      className="flex items-center gap-3 rounded-lg bg-slate-50/70 px-2.5 py-1.5"
+                    >
+                      <PhoneCall className="h-3.5 w-3.5 text-cyan-600 flex-shrink-0" />
+                      <span className="font-inter text-[12px] font-semibold text-slate-800 flex-shrink-0 w-[100px] truncate">
+                        {city}
+                      </span>
+                      <div className="flex items-end gap-[2px] h-3 flex-1 min-w-0">
+                        {Array.from({ length: 18 }).map((_, i) => (
+                          <span
+                            key={i}
+                            className="wave-bar w-[2px] rounded-full bg-gradient-to-t from-cyan-400 to-violet-500"
+                            style={{
+                              height: `${25 + ((i * 19 + offset * 7) % 75)}%`,
+                              animationDelay: `${(i * 0.05 + offset * 0.1) % 1}s`,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-mono text-[11px] font-semibold text-slate-500 tabular-nums flex-shrink-0">
+                        {duration}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             {/* decorative glow */}
