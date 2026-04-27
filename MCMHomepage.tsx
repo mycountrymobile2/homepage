@@ -681,7 +681,7 @@ function MegaPanelContent({ panel }: { panel: MegaPanel }) {
   );
 }
 
-function Header() {
+export function Header() {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const closeTimer = useRef<number | null>(null);
 
@@ -2632,7 +2632,7 @@ function FooterColumn({ column }: { column: FooterColumn }) {
   );
 }
 
-function Footer() {
+export function Footer() {
   return (
     <footer className="relative w-full rounded-t-[40px] bg-[#05070f] text-white overflow-hidden mt-8">
       <div
