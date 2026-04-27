@@ -121,29 +121,22 @@ const TRANSCRIPT_LINES: TranscriptLine[] = [
     who: "Sarah Mitchell",
     initials: "SM",
     isAgent: false,
-    text: "Hi, this is Sarah from Acme Corp. I'm calling about the enterprise plan we discussed last week.",
+    text: "Hi, calling about the enterprise plan.",
     delay: 0,
   },
   {
     who: "You",
     initials: "Y",
     isAgent: true,
-    text: "Hi Sarah! I have all the details ready — we can onboard your team of 50 next Monday.",
+    text: "Sure — we can onboard your team Monday.",
     delay: 1.4,
   },
   {
     who: "Sarah Mitchell",
     initials: "SM",
     isAgent: false,
-    text: "Perfect. Will a dedicated account manager be available for our kickoff call?",
+    text: "Perfect. Will we get an account manager?",
     delay: 2.8,
-  },
-  {
-    who: "You",
-    initials: "Y",
-    isAgent: true,
-    text: "Absolutely — I'll send the calendar invite right after this call.",
-    delay: 4.2,
   },
 ];
 
@@ -294,19 +287,19 @@ function CallingScreen() {
           </div>
 
           {/* RIGHT — transcript */}
-          <div className="flex flex-col min-h-[440px]">
+          <div className="flex flex-col">
             {/* Tabs */}
-            <div className="flex items-center gap-1 border-b border-slate-200 px-3 pt-3 overflow-x-auto">
+            <div className="flex items-center border-b border-slate-200 px-2 pt-2">
               {tabs.map(({ Icon, label, active }) => (
                 <button
                   key={label}
                   type="button"
-                  className={`relative flex items-center gap-1.5 px-3 py-2 font-inter text-xs font-semibold transition-colors whitespace-nowrap ${
+                  className={`relative flex flex-1 min-w-0 items-center justify-center gap-1.5 px-2 py-2 font-inter text-[11px] sm:text-xs font-semibold transition-colors ${
                     active ? "text-cyan-700" : "text-slate-500 hover:text-slate-700"
                   }`}
                 >
-                  <Icon className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{label}</span>
+                  <Icon className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="truncate">{label}</span>
                   {active && (
                     <span className="absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600" />
                   )}
@@ -331,34 +324,10 @@ function CallingScreen() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 px-4 py-4 space-y-3 overflow-hidden">
+            <div className="flex-1 px-4 py-4 space-y-2.5 overflow-hidden">
               {TRANSCRIPT_LINES.map((line) => (
                 <TranscriptMessage key={line.who + line.delay} line={line} />
               ))}
-
-              {/* Typing indicator */}
-              <div
-                className="flex items-center gap-2 pt-1 transcript-msg"
-                style={{ animationDelay: "5.6s" }}
-              >
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 text-white flex items-center justify-center text-[9px] font-bold flex-shrink-0 shadow-sm">
-                  SM
-                </div>
-                <div className="flex items-center gap-1 rounded-full bg-slate-100 px-3 py-2">
-                  <span
-                    className="typing-dot h-1.5 w-1.5 rounded-full bg-slate-400"
-                    style={{ animationDelay: "0s" }}
-                  />
-                  <span
-                    className="typing-dot h-1.5 w-1.5 rounded-full bg-slate-400"
-                    style={{ animationDelay: "0.2s" }}
-                  />
-                  <span
-                    className="typing-dot h-1.5 w-1.5 rounded-full bg-slate-400"
-                    style={{ animationDelay: "0.4s" }}
-                  />
-                </div>
-              </div>
             </div>
 
             {/* Footer with audio bars */}
