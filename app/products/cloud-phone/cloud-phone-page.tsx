@@ -6,10 +6,10 @@
  * URL: /products/cloud-phone
  *
  * Section flow:
- *   01 Hero — animated USA POP map (38 cities) + headline + CTAs
+ *   01 Hero — live calling screen with AI transcript + headline + CTAs
  *   02 Opening paragraph — slate band, accent quote
  *   03 Bento features — 6 features in a non-uniform bento grid
- *   04 Zia AI on every line — dark band, asymmetric
+ *   04 AI Receptionist on every line — dark band, asymmetric
  *   05 Compliance for USA outbound — light band, three pillars
  *   06 Testimonial — warm amber/rose
  *   07 Pricing callout — brand gradient strip
@@ -23,6 +23,7 @@ import {
   ArrowRight,
   Phone,
   PhoneCall,
+  PhoneOff,
   Voicemail,
   Disc,
   PhoneForwarded,
@@ -40,8 +41,18 @@ import {
   MessageCircle,
   Server,
   Users,
+  Pause,
+  MicOff,
+  Mic,
+  Volume2,
+  ArrowLeftRight,
+  Circle,
+  Grid3x3,
+  History,
+  FileText,
+  StickyNote,
+  User,
 } from "lucide-react";
-import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 import { Header, Footer } from "@/MCMHomepage";
 
 /* ---------------------------------------------------------------- */
@@ -94,131 +105,254 @@ function Reveal({
 }
 
 /* ---------------------------------------------------------------- */
-/* USA POP Map (Hero)                                                */
+/* Calling Screen with AI Live Transcript (Hero)                      */
 /* ---------------------------------------------------------------- */
 
-const POP_CITIES: { name: string; coords: [number, number] }[] = [
-  { name: "New York, NY", coords: [-74.006, 40.7128] },
-  { name: "Los Angeles, CA", coords: [-118.2437, 34.0522] },
-  { name: "Chicago, IL", coords: [-87.6298, 41.8781] },
-  { name: "Houston, TX", coords: [-95.3698, 29.7604] },
-  { name: "Phoenix, AZ", coords: [-112.074, 33.4484] },
-  { name: "Philadelphia, PA", coords: [-75.1652, 39.9526] },
-  { name: "San Antonio, TX", coords: [-98.4936, 29.4241] },
-  { name: "San Diego, CA", coords: [-117.1611, 32.7157] },
-  { name: "Dallas, TX", coords: [-96.797, 32.7767] },
-  { name: "San Jose, CA", coords: [-121.8863, 37.3382] },
-  { name: "Austin, TX", coords: [-97.7431, 30.2672] },
-  { name: "Jacksonville, FL", coords: [-81.6557, 30.3322] },
-  { name: "Fort Worth, TX", coords: [-97.3308, 32.7555] },
-  { name: "Columbus, OH", coords: [-82.9988, 39.9612] },
-  { name: "Indianapolis, IN", coords: [-86.1581, 39.7684] },
-  { name: "Charlotte, NC", coords: [-80.8431, 35.2271] },
-  { name: "San Francisco, CA", coords: [-122.4194, 37.7749] },
-  { name: "Seattle, WA", coords: [-122.3321, 47.6062] },
-  { name: "Denver, CO", coords: [-104.9903, 39.7392] },
-  { name: "Washington, DC", coords: [-77.0369, 38.9072] },
-  { name: "Boston, MA", coords: [-71.0589, 42.3601] },
-  { name: "Nashville, TN", coords: [-86.7816, 36.1627] },
-  { name: "Detroit, MI", coords: [-83.0458, 42.3314] },
-  { name: "Memphis, TN", coords: [-90.049, 35.1495] },
-  { name: "Portland, OR", coords: [-122.6765, 45.5152] },
-  { name: "Las Vegas, NV", coords: [-115.1398, 36.1699] },
-  { name: "Louisville, KY", coords: [-85.7585, 38.2527] },
-  { name: "Baltimore, MD", coords: [-76.6122, 39.2904] },
-  { name: "Milwaukee, WI", coords: [-87.9065, 43.0389] },
-  { name: "Albuquerque, NM", coords: [-106.6504, 35.0844] },
-  { name: "Tucson, AZ", coords: [-110.9747, 32.2226] },
-  { name: "Fresno, CA", coords: [-119.7726, 36.7378] },
-  { name: "Atlanta, GA", coords: [-84.388, 33.749] },
-  { name: "Miami, FL", coords: [-80.1918, 25.7617] },
-  { name: "Minneapolis, MN", coords: [-93.265, 44.9778] },
-  { name: "Cleveland, OH", coords: [-81.6944, 41.4993] },
-  { name: "New Orleans, LA", coords: [-90.0715, 29.9511] },
-  { name: "Salt Lake City, UT", coords: [-111.891, 40.7608] },
+type TranscriptLine = {
+  who: string;
+  initials: string;
+  isAgent: boolean;
+  text: string;
+  delay: number;
+};
+
+const TRANSCRIPT_LINES: TranscriptLine[] = [
+  {
+    who: "Sarah Mitchell",
+    initials: "SM",
+    isAgent: false,
+    text: "Hi, calling about the enterprise plan.",
+    delay: 0,
+  },
+  {
+    who: "You",
+    initials: "Y",
+    isAgent: true,
+    text: "Sure — we can onboard your team Monday.",
+    delay: 1.4,
+  },
+  {
+    who: "Sarah Mitchell",
+    initials: "SM",
+    isAgent: false,
+    text: "Perfect. Will we get an account manager?",
+    delay: 2.8,
+  },
 ];
 
-const TOPO_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+function TranscriptMessage({ line }: { line: TranscriptLine }) {
+  const { who, initials, isAgent, text, delay } = line;
+  return (
+    <div
+      className={`transcript-msg flex gap-2 ${isAgent ? "flex-row-reverse" : ""}`}
+      style={{ animationDelay: `${delay}s` }}
+    >
+      <div
+        className={`h-6 w-6 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0 shadow-sm ${
+          isAgent
+            ? "bg-slate-900 text-white"
+            : "bg-gradient-to-br from-cyan-500 to-violet-600 text-white"
+        }`}
+        aria-hidden="true"
+      >
+        {initials}
+      </div>
+      <div
+        className={`max-w-[82%] rounded-2xl px-3 py-2 ${
+          isAgent
+            ? "bg-slate-900 text-white rounded-tr-sm"
+            : "bg-slate-100 text-slate-800 rounded-tl-sm"
+        }`}
+      >
+        <div
+          className={`font-inter text-[10px] font-semibold mb-0.5 ${
+            isAgent ? "text-slate-300" : "text-slate-500"
+          }`}
+        >
+          {who}
+        </div>
+        <div className="font-inter text-[12.5px] leading-snug">{text}</div>
+      </div>
+    </div>
+  );
+}
 
-function UsaPopMap() {
+function CallingScreen() {
+  const callButtons: { Icon: typeof Pause; label: string; recording?: boolean }[] = [
+    { Icon: Pause, label: "Hold" },
+    { Icon: MicOff, label: "Mute" },
+    { Icon: Volume2, label: "Speaker" },
+    { Icon: ArrowLeftRight, label: "Transfer" },
+    { Icon: Circle, label: "Record", recording: true },
+    { Icon: Grid3x3, label: "DTMF" },
+  ];
+
+  const tabs: { Icon: typeof Pause; label: string; active?: boolean }[] = [
+    { Icon: History, label: "Call History" },
+    { Icon: FileText, label: "Transcript", active: true },
+    { Icon: StickyNote, label: "Notes" },
+    { Icon: User, label: "Contact Info" },
+  ];
+
   return (
     <div className="relative w-full">
-      {/* soft brand glow behind the map */}
+      {/* soft brand glow behind the card */}
       <div
-        className="absolute inset-0 -z-10 blur-3xl opacity-70"
+        aria-hidden="true"
+        className="absolute -inset-6 -z-10 blur-3xl opacity-70"
         style={{
           background:
-            "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(34,211,238,0.18), transparent 60%), radial-gradient(ellipse 55% 50% at 70% 60%, rgba(139,92,246,0.14), transparent 60%)",
+            "radial-gradient(ellipse 65% 55% at 30% 30%, rgba(34,211,238,0.22), transparent 60%), radial-gradient(ellipse 55% 50% at 75% 70%, rgba(139,92,246,0.18), transparent 60%)",
         }}
       />
-      <ComposableMap
-        projection="geoAlbersUsa"
-        projectionConfig={{ scale: 1050 }}
-        width={780}
-        height={490}
-        style={{ width: "100%", height: "auto" }}
-      >
-        <defs>
-          <linearGradient id="dotGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#22d3ee" />
-            <stop offset="100%" stopColor="#8b5cf6" />
-          </linearGradient>
-          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.4" />
-          </linearGradient>
-        </defs>
 
-        <Geographies geography={TOPO_URL}>
-          {({ geographies }) =>
-            geographies.map((geo) => (
-              <Geography
-                key={geo.rsmKey}
-                geography={geo}
-                style={{
-                  default: {
-                    fill: "#f1f5f9",
-                    stroke: "#cbd5e1",
-                    strokeWidth: 0.6,
-                    outline: "none",
-                  },
-                  hover: { fill: "#f1f5f9", outline: "none" },
-                  pressed: { fill: "#f1f5f9", outline: "none" },
-                }}
-              />
-            ))
-          }
-        </Geographies>
-
-        {POP_CITIES.map((city, i) => (
-          <Marker key={city.name} coordinates={city.coords}>
-            <circle
-              r={6}
-              fill="none"
-              stroke="url(#ringGrad)"
-              strokeWidth={1.2}
-              className="pop-ring"
-              style={{ animationDelay: `${(i % 8) * 0.3}s` }}
-            />
-            <circle
-              r={3.2}
-              fill="url(#dotGrad)"
-              className="pop-dot"
-              style={{ animationDelay: `${(i % 8) * 0.3}s` }}
-            />
-          </Marker>
-        ))}
-      </ComposableMap>
-
-      {/* floating live pill */}
-      <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur border border-slate-200 px-3 py-1.5 shadow-lg">
+      {/* Floating live pill */}
+      <div className="absolute -top-3 right-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-white border border-slate-200 px-3 py-1.5 shadow-lg">
         <span className="relative flex h-2 w-2">
           <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />
           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
         </span>
         <span className="font-inter text-[11px] font-semibold text-slate-700">
-          38 USA POPs · Live
+          Live · AI Transcribing
         </span>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-200 shadow-xl shadow-slate-900/5 overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-[260px_1fr]">
+          {/* LEFT — call controls */}
+          <div className="bg-slate-50/60 border-b md:border-b-0 md:border-r border-slate-200 p-5">
+            {/* Contact header */}
+            <div className="flex items-center gap-3">
+              <div className="relative h-11 w-11 rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 text-white font-outfit font-bold flex items-center justify-center text-sm shadow-md">
+                SM
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-outfit font-semibold text-sm text-slate-900 truncate">
+                  Sarah Mitchell
+                </div>
+                <div className="font-inter text-xs text-slate-500 truncate">
+                  +1 (415) 555-0192
+                </div>
+              </div>
+            </div>
+
+            {/* Status + timer */}
+            <div className="mt-4 flex items-center justify-between rounded-xl bg-white border border-slate-200 px-3 py-2">
+              <div className="flex items-center gap-1.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                </span>
+                <span className="font-inter text-[11px] font-semibold text-emerald-700">
+                  On Call
+                </span>
+              </div>
+              <span className="font-mono text-xs font-semibold text-slate-700 tabular-nums">
+                02:34
+              </span>
+            </div>
+
+            {/* Buttons grid */}
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {callButtons.map(({ Icon, label, recording }) => (
+                <button
+                  key={label}
+                  type="button"
+                  className="group flex flex-col items-center gap-1.5 rounded-xl py-2.5 hover:bg-white border border-transparent hover:border-slate-200 transition-colors"
+                  aria-label={label}
+                >
+                  <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm group-hover:text-slate-900 group-hover:shadow-md transition">
+                    <Icon className="h-4 w-4" />
+                    {recording && (
+                      <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-rose-500 animate-pulse" />
+                    )}
+                  </span>
+                  <span className="font-inter text-[10px] font-medium text-slate-500">
+                    {label}
+                  </span>
+                </button>
+              ))}
+
+              {/* Hangup spans full width */}
+              <button
+                type="button"
+                className="col-span-3 mt-1 flex items-center justify-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 text-white py-2.5 font-inter text-xs font-semibold transition-colors shadow-md shadow-rose-500/20"
+                aria-label="End call"
+              >
+                <PhoneOff className="h-4 w-4" />
+                End Call
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT — transcript */}
+          <div className="flex flex-col">
+            {/* Tabs */}
+            <div className="flex items-center border-b border-slate-200 px-2 pt-2">
+              {tabs.map(({ Icon, label, active }) => (
+                <button
+                  key={label}
+                  type="button"
+                  className={`relative flex flex-1 min-w-0 items-center justify-center gap-1.5 px-2 py-2 font-inter text-[11px] sm:text-xs font-semibold transition-colors ${
+                    active ? "text-cyan-700" : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="truncate">{label}</span>
+                  {active && (
+                    <span className="absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Transcript header bar */}
+            <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50/60 border-b border-slate-200">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-white border border-cyan-200 px-2.5 py-1">
+                <Sparkles className="h-3 w-3 text-cyan-600" />
+                <span className="font-inter text-[10.5px] font-semibold uppercase tracking-[0.12em] text-cyan-700">
+                  AI Agent · Live
+                </span>
+              </div>
+              <button
+                type="button"
+                className="font-inter text-[11px] font-semibold text-slate-600 hover:text-slate-900 px-2.5 py-1 rounded-md border border-slate-200 bg-white hover:bg-slate-50 transition"
+              >
+                Stop
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 px-4 py-4 space-y-2.5 overflow-hidden">
+              {TRANSCRIPT_LINES.map((line) => (
+                <TranscriptMessage key={line.who + line.delay} line={line} />
+              ))}
+            </div>
+
+            {/* Footer with audio bars */}
+            <div className="flex items-center justify-between px-4 py-2.5 border-t border-slate-200 bg-white">
+              <div className="flex items-center gap-2">
+                <Mic className="h-3.5 w-3.5 text-slate-500" />
+                <div className="flex items-end gap-[2px] h-3.5">
+                  {Array.from({ length: 14 }).map((_, i) => (
+                    <span
+                      key={i}
+                      className="wave-bar w-[2px] rounded-full bg-gradient-to-t from-cyan-400 to-violet-500"
+                      style={{
+                        height: `${30 + ((i * 17) % 70)}%`,
+                        animationDelay: `${i * 0.06}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+              <span className="font-inter text-[10.5px] text-slate-500">
+                Recording · End-to-end encrypted
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -312,9 +446,9 @@ function HeroSection() {
             </ul>
           </div>
 
-          {/* Right — animated USA POP map */}
+          {/* Right — live calling screen with AI transcript */}
           <div className="lg:col-span-7 relative">
-            <UsaPopMap />
+            <CallingScreen />
           </div>
         </div>
       </div>
@@ -476,29 +610,85 @@ function FeatureBento() {
               Local caller ID matching — no flagged or spam-likely outbound.
             </p>
 
-            {/* mini stat row */}
-            <div className="mt-7 grid grid-cols-3 gap-3 max-w-md">
-              <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
-                <div className="font-outfit text-2xl font-bold text-slate-900">38</div>
-                <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
-                  USA POPs
+            {/* Bottom: stats column + live calls panel side-by-side on md+ */}
+            <div className="mt-7 grid grid-cols-1 sm:grid-cols-5 gap-4 items-stretch">
+              {/* Stats — stacked on the left */}
+              <div className="sm:col-span-2 grid grid-cols-3 sm:grid-cols-1 gap-3">
+                <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
+                  <div className="font-outfit text-2xl font-bold text-slate-900">38</div>
+                  <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
+                    USA POPs
+                  </div>
+                </div>
+                <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
+                  <div className="font-outfit text-2xl font-bold text-slate-900">99.99%</div>
+                  <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
+                    Uptime
+                  </div>
+                </div>
+                <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
+                  <div className="font-outfit text-2xl font-bold text-slate-900">∞</div>
+                  <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
+                    USA minutes
+                  </div>
                 </div>
               </div>
-              <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
-                <div className="font-outfit text-2xl font-bold text-slate-900">99.99%</div>
-                <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
-                  Uptime
+
+              {/* Live USA call activity */}
+              <div className="sm:col-span-3 relative rounded-2xl bg-white border border-slate-200 p-4 shadow-sm flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="inline-flex items-center gap-1.5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-75 animate-ping" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                    </span>
+                    <span className="font-inter text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700">
+                      Live calls
+                    </span>
+                  </div>
+                  <span className="font-mono text-[11px] font-semibold text-slate-500 tabular-nums">
+                    1,284 now
+                  </span>
                 </div>
-              </div>
-              <div className="rounded-xl bg-white border border-slate-200 px-3 py-3">
-                <div className="font-outfit text-2xl font-bold text-slate-900">∞</div>
-                <div className="font-inter text-[11px] uppercase tracking-wide text-slate-500">
-                  USA minutes
-                </div>
+
+                <ul className="space-y-2 flex-1">
+                  {[
+                    { city: "New York, NY", duration: "04:21", offset: 0 },
+                    { city: "Austin, TX", duration: "01:08", offset: 3 },
+                    { city: "Seattle, WA", duration: "07:45", offset: 6 },
+                    { city: "Miami, FL", duration: "02:13", offset: 2 },
+                    { city: "Denver, CO", duration: "05:36", offset: 5 },
+                  ].map(({ city, duration, offset }) => (
+                    <li
+                      key={city}
+                      className="flex items-center gap-3 rounded-lg bg-slate-50/70 px-2.5 py-1.5"
+                    >
+                      <PhoneCall className="h-3.5 w-3.5 text-cyan-600 flex-shrink-0" />
+                      <span className="font-inter text-[12px] font-semibold text-slate-800 flex-shrink-0 w-[100px] truncate">
+                        {city}
+                      </span>
+                      <div className="flex items-end gap-[2px] h-3 flex-1 min-w-0">
+                        {Array.from({ length: 18 }).map((_, i) => (
+                          <span
+                            key={i}
+                            className="wave-bar w-[2px] rounded-full bg-gradient-to-t from-cyan-400 to-violet-500"
+                            style={{
+                              height: `${25 + ((i * 19 + offset * 7) % 75)}%`,
+                              animationDelay: `${(i * 0.05 + offset * 0.1) % 1}s`,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-mono text-[11px] font-semibold text-slate-500 tabular-nums flex-shrink-0">
+                        {duration}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            {/* decorative phone icon */}
+            {/* decorative glow */}
             <div
               className="absolute -right-6 -bottom-6 h-44 w-44 rounded-full bg-gradient-to-br from-cyan-400/20 to-violet-500/10 blur-2xl"
               aria-hidden="true"
@@ -652,10 +842,10 @@ function FeatureBento() {
 }
 
 /* ---------------------------------------------------------------- */
-/* 04 — Zia AI on every line                                         */
+/* 04 — AI Receptionist on every line                                */
 /* ---------------------------------------------------------------- */
 
-function ZiaSection() {
+function AIReceptionistSection() {
   return (
     <section className="relative bg-slate-950 text-white py-20 overflow-hidden">
       <div
@@ -673,16 +863,16 @@ function ZiaSection() {
           <div className="lg:col-span-5">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur border border-white/20 px-2.5 py-1 font-inter text-[10.5px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
               <Bot className="h-3 w-3" />
-              MCM AI · Zia
+                MCM AI Receptionist
             </span>
             <h2 className="mt-4 font-outfit text-3xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-white text-balance">
-              Zia, our AI Receptionist,{" "}
+                Our AI Receptionist,{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-violet-300">
                 on every line.
               </span>
             </h2>
             <p className="mt-4 font-inter text-base text-white/70 leading-relaxed">
-              Zia sits on every MCM line. She answers, qualifies, books, and
+                Our AI Agent sits on every MCM line. It answers, qualifies, books, and
               summarizes — with CRM write-back to HubSpot, Zoho, or Pipedrive.
             </p>
 
@@ -709,19 +899,19 @@ function ZiaSection() {
                 href="/products/ai/zia-receptionist"
                 className="inline-flex items-center gap-1.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 font-inter text-sm font-semibold px-5 py-2.5 transition-colors"
               >
-                Meet Zia
+                Meet the AI Agent
                 <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href="/products/ai"
                 className="font-inter text-sm font-semibold text-white/70 hover:text-white transition-colors"
               >
-                The Zia family →
+                The AI agent family →
               </a>
             </div>
           </div>
 
-          {/* Right — Zia card */}
+              {/* Right — AI Receptionist card */}
           <div className="lg:col-span-7">
             <div className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6 lg:p-8 shadow-2xl">
               {/* Live call header */}
@@ -732,7 +922,7 @@ function ZiaSection() {
                     <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-slate-900" />
                   </div>
                   <div>
-                    <div className="font-inter text-sm font-semibold text-white">Zia · AI Receptionist</div>
+                    <div className="font-inter text-sm font-semibold text-white">AI Receptionist</div>
                     <div className="font-inter text-[11px] text-white/50">Live call · +1 (415) 555-0182</div>
                   </div>
                 </div>
@@ -1107,8 +1297,8 @@ function ClosingCta() {
 const SUITE = [
   {
     href: "/products/cloud-phone/business-phone",
-    title: "Business Phone + Zia",
-    description: "Unlimited USA calling with Zia AI built in.",
+      title: "Business Phone + AI Agent",
+      description: "Unlimited USA calling with our AI Agent built in.",
     icon: Phone,
   },
   {
@@ -1231,7 +1421,7 @@ export default function CloudPhonePage() {
         <HeroSection />
         <OpeningSection />
         <FeatureBento />
-        <ZiaSection />
+        <AIReceptionistSection />
         <ComplianceSection />
         <TestimonialSection />
         <PricingCallout />
